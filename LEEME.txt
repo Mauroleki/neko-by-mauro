@@ -208,7 +208,8 @@ activado. Se conserva el nombre del archivo descargable Neko By Mauro.zip.
 
 ONEKO BY MAU 1.6 - ACTUALIZACIONES DESDE GITHUB
 - En el menu del icono junto al reloj: "Buscar actualizaciones".
-- Consulta GitHub al abrir. Cuando encuentra una nueva version, pregunta
+- Consulta GitHub al abrir y cada 15 minutos mientras sigue abierto.
+  Cuando encuentra una nueva version, pregunta
   antes de instalarla. Sistema\canal.txt puede configurar otro repositorio;
   si falta, usa el repositorio oficial de Mauro.
 - Descarga Oneko.exe desde la Release de GitHub. Compara tamano y SHA-256,
@@ -233,7 +234,10 @@ ONEKO BY MAU 1.7 - EL CABALLERO
 
 ONEKO BY MAU 1.8 - AVISO AUTOMATICO CORREGIDO
 - Al abrir, comprueba la ultima Release publicada. Si es mas nueva, aparece
-  "Oye, hay una nueva version disponible. Quieres actualizar ahora?".
+  "Hay una nueva version disponible. Quieres actualizar?".
+- Tambien comprueba cada 15 minutos mientras esta abierto. Si eliges No,
+  no repite el aviso de esa version hasta que vuelvas a abrir el programa.
+  Puedes buscar e instalarla manualmente desde el menu en cualquier momento.
 - El canal oficial y el actualizador auxiliar estan integrados en el EXE.
   Esto permite usar la actualizacion aun si faltan Sistema\canal.txt y
   Sistema\Updater.exe. La carpeta Sistema sigue incluida en el ZIP completo.
