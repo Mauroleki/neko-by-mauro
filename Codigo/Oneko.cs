@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-[assembly: AssemblyVersion("1.7.0.0")]
-[assembly: AssemblyFileVersion("1.7.0.0")]
+[assembly: AssemblyVersion("1.8.0.0")]
+[assembly: AssemblyFileVersion("1.8.0.0")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7.2", FrameworkDisplayName=".NET Framework 4.7.2")]
 
 internal static class Program
@@ -118,10 +118,10 @@ internal sealed class CatForm : SpriteOverlay
     void Notice(string text){tray.ShowBalloonTip(4000,"Oneko By Mau",text,ToolTipIcon.Info);}
     void BuildMenu()
     {
-        menu.Items.Add(new ToolStripMenuItem("Oneko By Mau · 1.7 · "+settings.Name) {Enabled=false});
+        menu.Items.Add(new ToolStripMenuItem("Oneko By Mau · 1.8 · "+settings.Name) {Enabled=false});
         menu.Items.Add("Ponerle nombre…",null,delegate{
             renaming=true;string name;try{name=NamePrompt.Ask(settings.Name);}finally{renaming=false;}
-            if(name!=null){settings.Name=name;menu.Items[0].Text="Oneko By Mau · 1.7 · "+name;UpdateTrayText();Save();DrawBadge();}
+            if(name!=null){settings.Name=name;menu.Items[0].Text="Oneko By Mau · 1.8 · "+name;UpdateTrayText();Save();DrawBadge();}
         });
         showName.Checked=settings.ShowName;showName.CheckOnClick=true;
         showName.CheckedChanged+=delegate{settings.ShowName=showName.Checked;Save();DrawBadge();};menu.Items.Add(showName);
@@ -474,7 +474,7 @@ internal sealed class WelcomeToast : Form
     public WelcomeToast(Icon catIcon)
     {
         icon = (Icon)catIcon.Clone();
-        Text = "Oneko By Mau 1.7";
+        Text = "Oneko By Mau 1.8";
         AutoScaleMode = AutoScaleMode.None;
         FormBorderStyle = FormBorderStyle.None;
         ShowInTaskbar = false;
@@ -510,7 +510,7 @@ internal sealed class WelcomeToast : Form
         using (var muted = new SolidBrush(Color.FromArgb(116,104,104)))
         using (var border = new Pen(Color.FromArgb(228,212,198)))
         {
-            e.Graphics.DrawString("Oneko By Mau 1.7",title,ink,64,18);
+            e.Graphics.DrawString("Oneko By Mau 1.8",title,ink,64,18);
             e.Graphics.DrawString("Tu gatito ya esta aqui.",caption,muted,66,46);
             e.Graphics.DrawRectangle(border,0,0,Width-1,Height-1);
         }
