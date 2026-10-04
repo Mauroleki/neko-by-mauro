@@ -1,4 +1,4 @@
-ONEKO BY MAU - 1.7 - WINDOWS 10 / 11
+ONEKO BY MAU - 1.8 - WINDOWS 10 / 11
 
 QUE ABRIR
 - Oneko.exe: abre el gato. Esta en esta misma carpeta.
@@ -16,7 +16,7 @@ ABRIR O ACTUALIZAR
    al reloj de Windows > Salir. Si no lo ves, abre la flecha ^.
 2. Extrae este ZIP: clic derecho > Extraer todo.
 3. Abre Oneko.exe en la carpeta extraida.
-4. Aparece "Oneko By Mau 1.7" durante 3 segundos y empieza el seguimiento.
+4. Aparece "Oneko By Mau 1.8" durante 3 segundos y empieza el seguimiento.
    No necesitas compilar, instalar Python ni usar Vencord.
 
 TODOS LOS CONTROLES: CLIC DERECHO EN EL ICONO JUNTO AL RELOJ
@@ -141,7 +141,7 @@ el personaje anterior. Si el personaje guardado no carga al iniciar, abre
 el gato clasico. No hace falta borrar el nombre ni las preferencias.
 
 Para actualizar: cierra la version anterior, extrae el ZIP completo
-en una carpeta nueva y abre Oneko.exe. El menu actual indica 1.7.
+en una carpeta nueva y abre Oneko.exe. El menu actual indica 1.8.
 Si la ventana de error sigue abierta, pulsa Salir en esa ventana.
 No necesitas reinstalar .NET para corregir este error de la version 3.2.
 
@@ -152,7 +152,7 @@ Windows para verificar la interaccion completa.
 INICIO AUTOMATICO - V3.4
 1. Cierra la version anterior y extrae el ZIP en una carpeta permanente,
    por ejemplo Documentos\Oneko. No lo abras desde el ZIP.
-2. Abre Oneko.exe. En el menu actual debe indicar 1.7.
+2. Abre Oneko.exe. En el menu actual debe indicar 1.8.
 3. Clic derecho en el icono junto al reloj > Iniciar con Windows.
 4. Una marca indica que la opcion esta activada.
 5. Al volver a iniciar sesion en Windows, se abrira con tu personaje,
@@ -208,17 +208,16 @@ activado. Se conserva el nombre del archivo descargable Neko By Mauro.zip.
 
 ONEKO BY MAU 1.6 - ACTUALIZACIONES DESDE GITHUB
 - En el menu del icono junto al reloj: "Buscar actualizaciones".
-- Si Sistema\canal.txt contiene la URL real del repositorio publico que
-  publica el proyecto, consulta al abrir. Cuando encuentra una nueva
-  version, pregunta antes de instalar.
+- Consulta GitHub al abrir. Cuando encuentra una nueva version, pregunta
+  antes de instalarla. Sistema\canal.txt puede configurar otro repositorio;
+  si falta, usa el repositorio oficial de Mauro.
 - Descarga Oneko.exe desde la Release de GitHub. Compara tamano y SHA-256,
   cierra el programa, guarda la copia anterior en Sistema y lo vuelve a abrir.
 - Los nombres, personajes, juguetes y demas preferencias no se borran.
-- Sistema\COMO-PUBLICAR.txt explica como configurar el repositorio y
-  publicar cada nueva version. Sin una URL real en canal.txt, este menu
-  informara que el canal aun no esta configurado.
-- Es necesario conservar la carpeta Sistema junto al ejecutable. Si esta
-  en una carpeta protegida de Windows, mueve la aplicacion a Documentos.
+- Sistema\COMO-PUBLICAR.txt explica como publicar cada nueva version.
+- El actualizador tambien esta integrado en Oneko.exe. Si falta la carpeta
+  Sistema, puede extraer una copia auxiliar en %LOCALAPPDATA% al actualizar.
+  Si la app esta en una carpeta protegida, muevela a Documentos.
 - Versiones 1.5 y anteriores necesitan recibir una vez esta nueva version
   para contar con el actualizador. Solo entonces podran recibir las futuras.
 
@@ -231,3 +230,14 @@ ONEKO BY MAU 1.7 - EL CABALLERO
   poses al motor; Recursos\knight.png contiene la hoja original.
 - Los usuarios de 1.6 pueden recibirlo al abrir la app despues de que se
   publique una Release estable v1.7.0 con Oneko.exe adjunto.
+
+ONEKO BY MAU 1.8 - AVISO AUTOMATICO CORREGIDO
+- Al abrir, comprueba la ultima Release publicada. Si es mas nueva, aparece
+  "Oye, hay una nueva version disponible. Quieres actualizar ahora?".
+- El canal oficial y el actualizador auxiliar estan integrados en el EXE.
+  Esto permite usar la actualizacion aun si faltan Sistema\canal.txt y
+  Sistema\Updater.exe. La carpeta Sistema sigue incluida en el ZIP completo.
+- Una copia anterior que muestra "Todavia no se ha configurado el repositorio"
+  no puede enterarse sola de esta correccion. Cierra esa copia, descarga el
+  ZIP completo de la version 1.8, extraelo y abre el nuevo Oneko.exe una vez.
+  Las preferencias se guardan fuera de la carpeta y se conservan.
