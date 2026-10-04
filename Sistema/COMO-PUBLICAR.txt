@@ -3,9 +3,9 @@ ACTUALIZACIONES DE ONEKO BY MAU
 Repositorio configurado: https://github.com/Mauroleki/neko-by-mauro
 Debe ser PUBLICO para que la app consulte versiones sin iniciar sesion.
 
-PRIMERA PUBLICACION (1.7)
+VERSION ACTUAL (1.8)
 1. En el repositorio de GitHub, abre Releases y luego Draft a new release.
-2. Crea la etiqueta v1.7.0 y escribe el titulo "Oneko By Mau 1.7".
+2. Crea la etiqueta v1.8.0 y escribe el titulo "Oneko By Mau 1.8".
 3. Adjunta el Oneko.exe y Neko By Mauro.zip de esta misma version.
    El archivo Oneko.exe debe conservar EXACTAMENTE ese nombre, ya que
    el programa lo busca asi entre los archivos adjuntos.
@@ -15,7 +15,7 @@ PRIMERA PUBLICACION (1.7)
 SIGUIENTES PUBLICACIONES
 1. Para cada version nueva, aumenta el numero del mensaje de apertura y
    AssemblyVersion de Oneko.cs. Recompila Oneko.exe.
-2. Publica una Release estable de GitHub con etiqueta v1.8.0 (segun la
+2. Publica una Release estable de GitHub con etiqueta v1.9.0 (segun la
    version correspondiente) y adjunta el archivo Oneko.exe COMO ASSET.
    Puedes adjuntar tambien el ZIP completo para nuevas instalaciones.
 3. Al abrirse, el programa consulta la ultima Release. Si encuentra una
@@ -28,8 +28,10 @@ Updater.exe espera a que se cierre el programa anterior, guarda una copia
 en Sistema/Oneko.previous.exe y abre la version nueva.
 
 Los usuarios de versiones 1.5 o anteriores deben descargar UNA VEZ una
-version que incluya este mecanismo. Las versiones futuras ya podran llegar
-desde GitHub Releases. Para actualizar, el usuario debe poder escribir en
+version que incluya este mecanismo. Si la 1.6 muestra "Todavia no se ha
+configurado el repositorio", debe instalar manualmente la 1.8 una vez.
+Las versiones futuras ya podran llegar desde GitHub Releases. Para actualizar,
+el usuario debe poder escribir en
 la carpeta donde extrajo el programa; evita carpetas protegidas del sistema.
 
 Nunca incluyas tokens de GitHub en canal.txt. El repositorio debe ser
