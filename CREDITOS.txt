@@ -60,4 +60,4 @@ pertenecen a Team Cherry; esta es una integracion de fans no oficial.
 La licencia MIT de oneko.js no cubre este personaje ni su hoja de poses.
 
 Version 1.8: canal oficial y actualizador integrados en el ejecutable;
-aviso automatico de nueva version al abrir, incluso sin archivos de Sistema.
+aviso automatico al abrir y cada 15 minutos, incluso sin archivos de Sistema.
