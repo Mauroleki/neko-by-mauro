@@ -105,7 +105,7 @@ internal sealed class CatForm : SpriteOverlay
                 LoadPlaces();
                 for(int i=1;i<settings.CatCount;i++)AddCat(i,false);
                 new WelcomeToast(catIcon).Show(this);
-                BeginInvoke(new Action(async delegate { await UpdateManager.CheckAsync(this,true); }));
+                UpdateManager.StartWatching(this);
             }
             if(startupLoadError!=null)Notice("No se pudo cargar el personaje guardado. Abrí el gato clásico. Detalle: "+startupLoadError);
             if(startupRegistrationError!=null)Notice("No pude actualizar el inicio automático. Puedes intentarlo desde el menú. Detalle: "+startupRegistrationError);
