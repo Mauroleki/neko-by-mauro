@@ -12,6 +12,7 @@ using System.Windows.Forms;
 internal static class UpdateManager
 {
     static bool busy;
+    const string OfficialRepository="https://github.com/Mauroleki/neko-by-mauro";
     static string RootPath { get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); } }
     static string ChannelPath { get { return Path.Combine(RootPath,"Sistema","canal.txt"); } }
     static string UpdateDirectory { get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"OnekoByMau","Updates"); } }
@@ -40,8 +41,22 @@ internal static class UpdateManager
     static bool ReadChannel(out string owner,out string repo)
     {
         owner=repo=null;
-        try {return File.Exists(ChannelPath) && TryRepository(File.ReadAllText(ChannelPath),out owner,out repo);}
-        catch(IOException){return false;}catch(UnauthorizedAccessException){return false;}
+        try {
+            if(File.Exists(ChannelPath) && TryRepository(File.ReadAllText(ChannelPath),out owner,out repo))return true;
+        }catch(IOException){}catch(UnauthorizedAccessException){}
+        return TryRepository(OfficialRepository,out owner,out repo);
+    }
+    static string EnsureHelper()
+    {
+        string bundled=Path.Combine(RootPath,"Sistema","Updater.exe");
+        if(File.Exists(bundled))return bundled;
+        Directory.CreateDirectory(UpdateDirectory);
+        string extracted=Path.Combine(UpdateDirectory,"Updater-"+Guid.NewGuid().ToString("N")+".exe");
+        using(Stream resource=Assembly.GetExecutingAssembly().GetManifestResourceStream("Updater.exe")) {
+            if(resource==null)throw new FileNotFoundException("Falta el actualizador integrado. Descarga el ZIP completo.");
+            using(var output=File.Create(extracted))resource.CopyTo(output);
+        }
+        return extracted;
     }
     internal static Release ParseRelease(string json,string owner,string repo)
     {
@@ -95,7 +110,7 @@ internal static class UpdateManager
                 if(!automatic)MessageBox.Show("Ya tienes la última versión ("+installed.Major+"."+installed.Minor+").","Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
-            if(MessageBox.Show("Hay una nueva versión disponible ("+release.Version+").\n\n¿Quieres actualizar ahora?",
+            if(MessageBox.Show(window,"Oye, hay una nueva versión disponible ("+release.Version+").\n\n¿Quieres actualizar ahora?",
                 "Oneko By Mau",MessageBoxButtons.YesNo,MessageBoxIcon.Question)!=DialogResult.Yes)return;
             Directory.CreateDirectory(UpdateDirectory);
             string staged=Path.Combine(UpdateDirectory,"Oneko-"+Guid.NewGuid().ToString("N")+".exe");
@@ -103,8 +118,7 @@ internal static class UpdateManager
                 using(var client=new WebClient())await client.DownloadFileTaskAsync(release.Url,staged);
                 if(new FileInfo(staged).Length!=release.Size || Hash(staged)!=release.Digest)
                     throw new InvalidDataException("La descarga no coincide con la huella SHA-256 publicada. No se instalará.");
-                string helper=Path.Combine(RootPath,"Sistema","Updater.exe");
-                if(!File.Exists(helper))throw new FileNotFoundException("Falta Sistema\\Updater.exe. Extrae el ZIP completo.");
+                string helper=EnsureHelper();
                 string target=Application.ExecutablePath;
                 string args="\""+target+"\" \""+staged+"\" "+Process.GetCurrentProcess().Id+" "+release.Digest;
                 Process.Start(new ProcessStartInfo(helper,args){UseShellExecute=false,WorkingDirectory=RootPath});
