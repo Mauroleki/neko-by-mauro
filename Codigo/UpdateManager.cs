@@ -1,0 +1,117 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+internal static class UpdateManager
+{
+    static bool busy;
+    static string RootPath { get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); } }
+    static string ChannelPath { get { return Path.Combine(RootPath,"Sistema","canal.txt"); } }
+    static string UpdateDirectory { get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"OnekoByMau","Updates"); } }
+
+    internal sealed class Release
+    {
+        public Version Version;
+        public Uri Url;
+        public string Digest;
+        public long Size;
+    }
+
+    internal static bool TryRepository(string text,out string owner,out string repo)
+    {
+        owner=repo=null;Uri uri;
+        if(!Uri.TryCreate(text == null ? "" : text.Trim(),UriKind.Absolute,out uri) || uri.Scheme!="https" ||
+           !uri.Host.Equals("github.com",StringComparison.OrdinalIgnoreCase) || !string.IsNullOrEmpty(uri.Query) || !string.IsNullOrEmpty(uri.Fragment))return false;
+        string[] parts=uri.AbsolutePath.Trim('/').Split('/');
+        if(parts.Length!=2 || !Regex.IsMatch(parts[0],@"^[A-Za-z0-9_.-]+$") || !Regex.IsMatch(parts[1],@"^[A-Za-z0-9_.-]+$"))return false;
+        owner=parts[0];repo=parts[1];return true;
+    }
+    internal static bool HasChannel()
+    {
+        string owner,repo;return ReadChannel(out owner,out repo);
+    }
+    static bool ReadChannel(out string owner,out string repo)
+    {
+        owner=repo=null;
+        try {return File.Exists(ChannelPath) && TryRepository(File.ReadAllText(ChannelPath),out owner,out repo);}
+        catch(IOException){return false;}catch(UnauthorizedAccessException){return false;}
+    }
+    internal static Release ParseRelease(string json,string owner,string repo)
+    {
+        var data=JsonLite.Parse(json) as Dictionary<string,object>;
+        if(data==null || !data.ContainsKey("tag_name") || !data.ContainsKey("assets"))throw new InvalidDataException("Respuesta de versión incompleta.");
+        string tag=Convert.ToString(data["tag_name"]).TrimStart('v','V');Version version;
+        if(!Version.TryParse(tag,out version))throw new InvalidDataException("La versión publicada no tiene formato v1.6.0.");
+        List<object> assets=data["assets"] as List<object>;
+        if(assets==null)throw new InvalidDataException("La versión publicada no contiene archivos.");
+        foreach(object item in assets){
+            var asset=item as Dictionary<string,object>;
+            if(asset==null || !asset.ContainsKey("name") || Convert.ToString(asset["name"])!="Oneko.exe")continue;
+            string digest=Convert.ToString(asset["digest"]);string download=Convert.ToString(asset["browser_download_url"]);
+            Uri url;long size=Convert.ToInt64(asset["size"]);
+            string prefix="/"+owner+"/"+repo+"/releases/download/";
+            if(!Uri.TryCreate(download,UriKind.Absolute,out url) || url.Scheme!="https" ||
+               !url.Host.Equals("github.com",StringComparison.OrdinalIgnoreCase) ||
+               !url.AbsolutePath.StartsWith(prefix,StringComparison.OrdinalIgnoreCase) ||
+               !url.AbsolutePath.EndsWith("/Oneko.exe",StringComparison.OrdinalIgnoreCase) ||
+               size<10000 || size>30*1024*1024 || digest==null || !Regex.IsMatch(digest,@"^sha256:[0-9a-fA-F]{64}$"))
+                throw new InvalidDataException("El archivo publicado no tiene una descarga o una huella SHA-256 válida.");
+            return new Release {Version=version,Url=url,Digest=digest.Substring(7).ToLowerInvariant(),Size=size};
+        }
+        throw new InvalidDataException("La versión publicada debe incluir Oneko.exe como archivo adjunto.");
+    }
+    static string Hash(string file)
+    {
+        using(var stream=File.OpenRead(file))using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-","").ToLowerInvariant();
+    }
+    public static async Task CheckAsync(Form window,bool automatic)
+    {
+        if(busy)return;
+        string owner,repo;
+        if(!ReadChannel(out owner,out repo)){
+            if(!automatic)MessageBox.Show("Todavía no se ha configurado el repositorio de actualizaciones. Consulta LEEME.txt.","Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            return;
+        }
+        busy=true;
+        try {
+            ServicePointManager.SecurityProtocol|=SecurityProtocolType.Tls12;
+            string api="https://api.github.com/repos/"+owner+"/"+repo+"/releases/latest";
+            string json;
+            using(var client=new WebClient()){
+                client.Headers[HttpRequestHeader.UserAgent]="Neko-By-Mauro-Updater/1.0";
+                client.Headers[HttpRequestHeader.Accept]="application/vnd.github+json";
+                json=await client.DownloadStringTaskAsync(new Uri(api));
+            }
+            Release release=ParseRelease(json,owner,repo);
+            var installed=Assembly.GetExecutingAssembly().GetName().Version;
+            if(release.Version<=installed){
+                if(!automatic)MessageBox.Show("Ya tienes la última versión ("+installed.Major+"."+installed.Minor+").","Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                return;
+            }
+            if(MessageBox.Show("Hay una nueva versión disponible ("+release.Version+").\n\n¿Quieres actualizar ahora?",
+                "Oneko By Mau",MessageBoxButtons.YesNo,MessageBoxIcon.Question)!=DialogResult.Yes)return;
+            Directory.CreateDirectory(UpdateDirectory);
+            string staged=Path.Combine(UpdateDirectory,"Oneko-"+Guid.NewGuid().ToString("N")+".exe");
+            try {
+                using(var client=new WebClient())await client.DownloadFileTaskAsync(release.Url,staged);
+                if(new FileInfo(staged).Length!=release.Size || Hash(staged)!=release.Digest)
+                    throw new InvalidDataException("La descarga no coincide con la huella SHA-256 publicada. No se instalará.");
+                string helper=Path.Combine(RootPath,"Sistema","Updater.exe");
+                if(!File.Exists(helper))throw new FileNotFoundException("Falta Sistema\\Updater.exe. Extrae el ZIP completo.");
+                string target=Application.ExecutablePath;
+                string args="\""+target+"\" \""+staged+"\" "+Process.GetCurrentProcess().Id+" "+release.Digest;
+                Process.Start(new ProcessStartInfo(helper,args){UseShellExecute=false,WorkingDirectory=RootPath});
+                window.Close();
+            }catch { try { if(File.Exists(staged))File.Delete(staged); }catch(IOException){} throw; }
+        }catch(Exception ex){
+            if(!automatic || !(ex is WebException))MessageBox.Show("No se pudo actualizar. Oneko seguirá funcionando.\n\n"+ex.Message,"Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+        }finally{busy=false;}
+    }
+}
