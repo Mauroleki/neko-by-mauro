@@ -1,0 +1,60 @@
+ONEKO ESCRITORIO
+
+Adaptacion a Windows de oneko.js, de adryd.
+Proyecto: https://github.com/adryd325/oneko.js
+Licencia MIT: ver Licencias\LICENCIA-oneko.txt.
+
+Referencia del usuario:
+https://github.com/Vendicated/Vencord/tree/main/src/plugins/oneko
+
+Se consulto el plugin para identificar exactamente sus recursos.
+No se incorpora codigo del host de Vencord en esta aplicacion.
+
+Script original, version referenciada por Vencord:
+https://raw.githubusercontent.com/adryd325/oneko.js/c4ee66353b11a44e4a5b7e914a81f8d33111555e/oneko.js
+
+Imagen original, version referenciada por Vencord:
+https://raw.githubusercontent.com/adryd325/oneko.js/14bab15a755d0e35cd4ae19c931d96d306f99f42/oneko.gif
+
+El port del motor conserva las coordenadas de imagen, la velocidad base
+de 10 pixeles por paso, el intervalo de 100 ms, el radio de parada de
+48 pixeles y los estados originales. Se agregan controles de escritorio,
+escalado opcional y limites por monitor. El host y la adaptacion se
+distribuyen bajo los mismos terminos MIT incluidos.
+
+Preparado el 3 de octubre de 2026 para Criss.
+
+Actualizacion: 8 variantes de color y mensaje de inicio "Oneko By Mau"
+solicitado por el usuario. Los creditos del proyecto original se mantienen.
+
+Version 3: nombre configurable, preferencias locales, paseo independiente,
+caricias, descanso sobre ventanas, pelota y ovillo. Los pelajes Siames,
+Atigrado naranja, Atigrado gris, Calico y Esmoquin son modificaciones
+programaticas de los sprites originales bajo la licencia MIT.
+
+Version 3.1: Rediseno del esmoquin, con marcas colocadas por pose.
+
+Version 3.2: Karnalito (VALORANT) integrado a partir de la hoja de poses
+proporcionada por el usuario. VALORANT y sus personajes pertenecen a
+Riot Games. Integracion de fan no oficial. La licencia de oneko.js
+corresponde al proyecto original; no otorga derechos sobre este personaje.
+
+Version 3.3: compilacion con referencias oficiales de .NET Framework
+4.7.2 para Windows y recuperacion ante errores de carga de personajes.
+
+Version 3.4: inicio automatico opcional por usuario, con activacion y
+desactivacion desde el menu y actualizacion de ruta al abrir una nueva copia.
+
+Version 1.4 (mensaje de bienvenida): varios gatos, objetos, accesorios,
+juguetes, sonidos y nuevas interacciones.
+
+Version 1.5 (mensaje de bienvenida): distribucion ordenada con launcher,
+instrucciones y creditos visibles, y subcarpetas para los demas archivos.
+
+Version 1.6 (mensaje de bienvenida): consulta de Releases publicas de GitHub,
+verificacion SHA-256 y actualizacion con copia de la version anterior.
+
+Version 1.7: El Caballero de Hollow Knight se integra a partir de la hoja
+de poses proporcionada por el usuario. Hollow Knight y El Caballero
+pertenecen a Team Cherry; esta es una integracion de fans no oficial.
+La licencia MIT de oneko.js no cubre este personaje ni su hoja de poses.

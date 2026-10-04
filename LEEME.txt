@@ -1,0 +1,233 @@
+ONEKO BY MAU - 1.7 - WINDOWS 10 / 11
+
+QUE ABRIR
+- Oneko.exe: abre el gato. Esta en esta misma carpeta.
+- LEEME.txt: instrucciones y opciones.
+- CREDITOS.txt: autores y procedencia de los dibujos.
+- Codigo: codigo fuente y COMPILAR.cmd, solo para quien quiera compilar.
+- Recursos: imagenes integradas en el ejecutable; no se necesitan por
+  separado para abrir Oneko.exe.
+- Vistas previas: imagenes para ver los disenos.
+- Licencias: licencia original y referencia del plugin de oneko.
+- Sistema: actualizador auxiliar y configuracion del canal de descargas.
+
+ABRIR O ACTUALIZAR
+1. Si tienes una version anterior abierta, clic derecho en su icono junto
+   al reloj de Windows > Salir. Si no lo ves, abre la flecha ^.
+2. Extrae este ZIP: clic derecho > Extraer todo.
+3. Abre Oneko.exe en la carpeta extraida.
+4. Aparece "Oneko By Mau 1.7" durante 3 segundos y empieza el seguimiento.
+   No necesitas compilar, instalar Python ni usar Vencord.
+
+TODOS LOS CONTROLES: CLIC DERECHO EN EL ICONO JUNTO AL RELOJ
+
+PONERLE NOMBRE
+- Elige "Ponerle nombre...", escribe hasta 20 caracteres y pulsa Guardar.
+- "Mostrar nombre" activa o desactiva la etiqueta junto al gato.
+- Un nombre vacio vuelve a "Oneko".
+
+PASEO INDEPENDIENTE (ACTIVABLE Y DESACTIVABLE)
+- Marca "Paseo independiente": camina solo y se toma pequenas pausas.
+- Desmarcalo: vuelve a seguir tu cursor.
+- Un juguete activo tiene prioridad sobre ambos modos. Guardalo para
+  volver al paseo o al seguimiento.
+
+CARICIAS
+- Marca "Modo caricias (clic en el gato)".
+- Acerca el cursor: el gato se queda quieto para que puedas tocarlo.
+- Haz clic izquierdo o mantenlo pulsado mientras pasas sobre el gato:
+  se rasca contento y aparecen corazoncitos.
+- Desmarca el modo para que el gato vuelva a dejar pasar TODOS los clics.
+- "Acariciar ahora" permite darle una caricia directamente desde el menu.
+
+DORMIR SOBRE VENTANAS
+- Deja una ventana SIN MAXIMIZAR, con espacio libre encima de su borde.
+- "Dormir sobre una ventana ahora" lo coloca dormido en un borde adecuado.
+- Sigue el borde cuando mueves la ventana. Si la cierras, minimizas,
+  maximizas o una ventana activa lo tapa, se despierta.
+- "Despertar" termina el descanso manual.
+- "Dormir sobre ventanas automaticamente" busca un borde al llevar unos
+  15 segundos quieto siguiendo el cursor; en paseo independiente lo
+  intenta periodicamente. Puedes desactivar esta opcion.
+- Del descanso automatico despierta al mover bastante el cursor (en modo
+  seguimiento), o tras unos 22 segundos. El descanso manual dura hasta
+  que lo despiertes o la ventana deje de servir como apoyo.
+- Si no hay un borde adecuado, no fuerza el descanso.
+
+TIPOS DE GATO
+- Tipo de gato > Blanco clasico, Naranjita, Gris humo, Negrito, Crema,
+  Rosa pastel, Lavanda, Azul cielo, Siames, Atigrado naranja,
+  Atigrado gris, Calico, Esmoquin, Karnalito (VALORANT) o
+  El Caballero (Hollow Knight).
+- Siames, atigrados, Calico y Esmoquin tienen patrones de pelaje.
+- Los gatos conservan las animaciones originales de oneko.js. Los dos
+  personajes invitados usan sus propias hojas de poses.
+- Tamano: 32, 64 o 96 px. Mira Vistas previas\TIPOS-DE-GATO.png.
+
+JUGUETES
+- Juguetes > Pelota, ovillo, ratoncito, pluma o puntero laser.
+- Arrastra el juguete con el boton izquierdo y sueltalo para lanzarlo.
+- Los gatos lo persiguen y lo empujan; rebota en los bordes y pierde velocidad.
+- El puntero laser sigue el cursor: mueve el raton para jugar.
+- Hay un juguete a la vez. Sacar otro sustituye el anterior.
+- Juguetes > Guardar juguete restaura el paseo o seguimiento elegido.
+- "Pausar" detiene la simulacion; "Reanudar" la continua.
+
+OTROS CONTROLES
+- "Traer junto al cursor" recupera al gato.
+- "Pausar" detiene el movimiento pero no oculta al gato.
+- Doble clic en el icono de la bandeja: pausa/reanuda.
+- "Salir" cierra todos los gatos, los juguetes y los objetos.
+
+AJUSTES
+Los nombres, visibilidad, disenos, accesorios, tamanos, caricias,
+numero de gatos, objetos y opciones se guardan localmente en:
+%LOCALAPPDATA%\OnekoByMau\settings.xml
+Los gatos adicionales usan cat2.xml, cat3.xml y cat4.xml en esa carpeta.
+Juguetes, pausa y descanso manual se reinician al abrir.
+El inicio automático es opcional y no pide permisos de administrador.
+No necesita internet ni modifica Discord. Al activar el inicio automático,
+crea su propia entrada de inicio para tu usuario de Windows.
+Para eliminarlo, desmarca "Iniciar con Windows", sal y borra la carpeta. Si quieres eliminar tambien las
+preferencias, borra la carpeta OnekoByMau dentro de %LOCALAPPDATA%.
+
+COMPROBACIONES Y LIMITES
+Compilacion completada. Se probaron la logica de movimiento, despertar,
+validacion y guardado del nombre, lectura de preferencias, los personajes
+y la conservacion de la transparencia en todas las imagenes.
+Los pelajes se renderizaron e inspeccionaron.
+No se ha ejecutado esta version en un escritorio Windows desde el entorno
+de desarrollo. Las caricias, el arrastre y el seguimiento de ventanas
+requieren comprobarse en tu PC. Si falla algo, envia una captura.
+Puede aparecer encima de aplicaciones y juegos en ventana/sin bordes.
+Esta version no incluye ocultacion automatica al jugar. Usa Salir antes
+de jugar si quieres asegurarte de que no aparezca.
+El programa no tiene firma digital comercial.
+
+CODIGO FUENTE
+Codigo\Oneko.cs: menu, modos, interacciones y mensaje de bienvenida.
+Codigo\NekoEngine.cs: motor de seguimiento y estados originales.
+Codigo\Extras.cs: pelajes, nombre, preferencias y juguetes.
+Codigo\Native.cs: funciones de ventanas y dibujo de Windows.
+Codigo\World.cs: comedero, agua, caja, casita, camita y sonidos.
+Recursos\oneko.gif: hoja de imagenes incluida en el ejecutable.
+Licencias\oneko.js: referencia utilizada por el plugin de Vencord.
+Codigo\COMPILAR.cmd: recompila Oneko.exe en la carpeta principal.
+Cierra Oneko antes de recompilarlo. El archivo no se necesita para jugar.
+CREDITOS.txt y Licencias\LICENCIA-oneko.txt: autoria y licencia original.
+
+V3.1: Esmoquin redisenado con manchas blancas ajustadas a cada pose.
+
+KARNALITO (VALORANT) - V3.2
+En el menu: Tipo de gato > Karnalito (VALORANT).
+Utiliza la hoja de poses proporcionada por el usuario. Corre con la Spike,
+descansa, duerme y reacciona a las caricias. Las poses laterales izquierdas
+se obtienen reflejando las derechas de la referencia.
+Conserva el paseo independiente, el nombre y los juguetes.
+Prueba el tamano de 64 o 96 px para apreciar sus detalles.
+El archivo karnalito.png se incluye dentro del ejecutable: no necesita
+internet ni tener VALORANT instalado o abierto.
+Vistas previas\KARNALITO-VISTA.png muestra algunas de sus poses.
+Codigo\KarnalitoSprites.cs adapta las poses al motor de animacion.
+Se verificaron las 32 casillas, sus bordes transparentes y la carga del
+recurso desde el ejecutable. La prueba visual en Windows sigue pendiente.
+
+CORRECCION V3.3 - ERROR AL SELECCIONAR KARNALITO
+Se corrigio la referencia de System.Collections.Generic.Queue: el
+ejecutable se compilo contra las referencias oficiales de .NET Framework
+4.7.2 para Windows, en lugar de las bibliotecas del entorno de desarrollo.
+Tambien se protege el cambio de personaje: si una carga falla, conserva
+el personaje anterior. Si el personaje guardado no carga al iniciar, abre
+el gato clasico. No hace falta borrar el nombre ni las preferencias.
+
+Para actualizar: cierra la version anterior, extrae el ZIP completo
+en una carpeta nueva y abre Oneko.exe. El menu actual indica 1.7.
+Si la ventana de error sigue abierta, pulsa Salir en esa ventana.
+No necesitas reinstalar .NET para corregir este error de la version 3.2.
+
+Verificado: Queue apunta a System (Windows), carga de la imagen desde el
+ejecutable y las 32 casillas del Karnalito. No se dispuso de un escritorio
+Windows para verificar la interaccion completa.
+
+INICIO AUTOMATICO - V3.4
+1. Cierra la version anterior y extrae el ZIP en una carpeta permanente,
+   por ejemplo Documentos\Oneko. No lo abras desde el ZIP.
+2. Abre Oneko.exe. En el menu actual debe indicar 1.7.
+3. Clic derecho en el icono junto al reloj > Iniciar con Windows.
+4. Una marca indica que la opcion esta activada.
+5. Al volver a iniciar sesion en Windows, se abrira con tu personaje,
+   nombre y preferencias guardadas. No requiere permisos de administrador.
+
+Para desactivarlo, vuelve a pulsar Iniciar con Windows. Cerrar con Salir
+solo cierra esta sesion: no desactiva la apertura del proximo inicio.
+Conserva Oneko.exe en su carpeta. Si lo mueves o instalas una version
+nueva, abre esa copia una vez: actualizara su ruta si la opcion ya estaba
+activada. No crea entradas duplicadas.
+Si lo deshabilitas en las aplicaciones de inicio de Windows, esa
+configuracion de Windows puede impedir que se abra automaticamente.
+
+Se utiliza solo el valor OnekoByMau.DesktopPet de la clave de inicio
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run.
+No se modifican entradas de otros programas.
+Codigo\StartupManager.cs contiene esta funcion. La compilacion se realizo con
+referencias oficiales de .NET Framework para Windows. El inicio real
+de sesion debe comprobarse en tu PC.
+
+ONEKO BY MAU 1.4 - NUEVAS FUNCIONES
+- "Varios gatos" agrega hasta cuatro gatos, o quita el ultimo. Cada gato
+  tiene su propio icono junto al reloj: haz clic derecho en el icono
+  correspondiente para ponerle nombre, cambiar diseno, tamano y accesorio.
+  Todos los gatos comparten los juguetes y objetos del escritorio.
+- "Objetos del escritorio" pone un comedero, agua, caja de carton, casita
+  y camita donde esta el cursor. Arrastra cada objeto con el boton izquierdo
+  para moverlo. Puedes volver a colocarlo desde el menu o guardar todos.
+  Cada gato puede acercarse a comer, beber, esconderse o descansar.
+  La comida y el agua vuelven a llenarse solas luego de un rato.
+- "Accesorio" permite elegir ninguno, mono, gorrito, corona o lentes por gato.
+- Despues de dormir el gato se estira. Puede reaccionar al teclado,
+  sorprenderte con un objeto encontrado, asomarse desde un borde y seguir
+  una rutina mas tranquila de noche. En "Comportamiento y sonidos" puedes
+  activar o desactivar cada opcion, incluida la entrada caminando.
+- "Sonidos suaves" esta apagado inicialmente. Al activarlo, se oyen
+  sonidos breves sintetizados en las caricias y algunas interacciones.
+- "Caricias recibidas" muestra el contador guardado de cada gato.
+- Si activaste "Iniciar con Windows" antes de actualizar, extrae este ZIP
+  en una carpeta permanente y abre su Oneko.exe una vez para actualizar
+  la ruta registrada. Los ajustes anteriores se conservan.
+
+Las animaciones y la interaccion con ventanas no han podido probarse en un
+escritorio Windows desde este entorno. Si algun control se comporta raro,
+envia una captura del error y una descripcion de lo que estabas haciendo.
+
+ONEKO BY MAU 1.5 - CARPETAS ORDENADAS
+En la carpeta principal ahora estan a simple vista solamente el ejecutable,
+estas instrucciones y los creditos. El codigo, recursos, vistas previas y
+licencias se encuentran en sus respectivas subcarpetas. Al abrir Oneko.exe
+desde esta ubicacion, el inicio automatico actualiza la ruta si ya estaba
+activado. Se conserva el nombre del archivo descargable Neko By Mauro.zip.
+
+ONEKO BY MAU 1.6 - ACTUALIZACIONES DESDE GITHUB
+- En el menu del icono junto al reloj: "Buscar actualizaciones".
+- Si Sistema\canal.txt contiene la URL real del repositorio publico que
+  publica el proyecto, consulta al abrir. Cuando encuentra una nueva
+  version, pregunta antes de instalar.
+- Descarga Oneko.exe desde la Release de GitHub. Compara tamano y SHA-256,
+  cierra el programa, guarda la copia anterior en Sistema y lo vuelve a abrir.
+- Los nombres, personajes, juguetes y demas preferencias no se borran.
+- Sistema\COMO-PUBLICAR.txt explica como configurar el repositorio y
+  publicar cada nueva version. Sin una URL real en canal.txt, este menu
+  informara que el canal aun no esta configurado.
+- Es necesario conservar la carpeta Sistema junto al ejecutable. Si esta
+  en una carpeta protegida de Windows, mueve la aplicacion a Documentos.
+- Versiones 1.5 y anteriores necesitan recibir una vez esta nueva version
+  para contar con el actualizador. Solo entonces podran recibir las futuras.
+
+ONEKO BY MAU 1.7 - EL CABALLERO
+- En el menu: Tipo de gato > El Caballero (Hollow Knight).
+- Usa la hoja animada proporcionada por el usuario. Camina, reacciona,
+  duerme y conserva las opciones de nombre, paseo, juguetes y varios gatos.
+- Para ver mejor los detalles, prueba el tamano 64 o 96 px.
+- Su imagen se incluye en Oneko.exe. Codigo\KnightSprites.cs adapta las
+  poses al motor; Recursos\knight.png contiene la hoja original.
+- Los usuarios de 1.6 pueden recibirlo al abrir la app despues de que se
+  publique una Release estable v1.7.0 con Oneko.exe adjunto.
