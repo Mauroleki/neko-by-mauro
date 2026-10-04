@@ -12,6 +12,8 @@ using System.Windows.Forms;
 internal static class UpdateManager
 {
     static bool busy;
+    static Version lastPromptedVersion;
+    static System.Windows.Forms.Timer watchTimer;
     const string OfficialRepository="https://github.com/Mauroleki/neko-by-mauro";
     static string RootPath { get { return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location); } }
     static string ChannelPath { get { return Path.Combine(RootPath,"Sistema","canal.txt"); } }
@@ -86,9 +88,20 @@ internal static class UpdateManager
     {
         using(var stream=File.OpenRead(file))using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-","").ToLowerInvariant();
     }
+    internal static void StartWatching(Form window)
+    {
+        if(watchTimer!=null)return;
+        watchTimer=new System.Windows.Forms.Timer {Interval=15*60*1000};
+        watchTimer.Tick+=async delegate { await CheckAsync(window,true); };
+        window.Disposed+=delegate {
+            if(watchTimer!=null){watchTimer.Stop();watchTimer.Dispose();watchTimer=null;}
+        };
+        watchTimer.Start();
+        window.BeginInvoke(new Action(async delegate { await CheckAsync(window,true); }));
+    }
     public static async Task CheckAsync(Form window,bool automatic)
     {
-        if(busy)return;
+        if(busy || window.IsDisposed || window.Disposing)return;
         string owner,repo;
         if(!ReadChannel(out owner,out repo)){
             if(!automatic)MessageBox.Show("Todavía no se ha configurado el repositorio de actualizaciones. Consulta LEEME.txt.","Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
@@ -105,12 +118,15 @@ internal static class UpdateManager
                 json=await client.DownloadStringTaskAsync(new Uri(api));
             }
             Release release=ParseRelease(json,owner,repo);
+            if(window.IsDisposed || window.Disposing)return;
             var installed=Assembly.GetExecutingAssembly().GetName().Version;
             if(release.Version<=installed){
                 if(!automatic)MessageBox.Show("Ya tienes la última versión ("+installed.Major+"."+installed.Minor+").","Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
-            if(MessageBox.Show(window,"Oye, hay una nueva versión disponible ("+release.Version+").\n\n¿Quieres actualizar ahora?",
+            if(automatic && release.Version==lastPromptedVersion)return;
+            lastPromptedVersion=release.Version;
+            if(MessageBox.Show(window,"Hay una nueva versión disponible.\n\n¿Quieres actualizar?\n\nVersión "+release.Version,
                 "Oneko By Mau",MessageBoxButtons.YesNo,MessageBoxIcon.Question)!=DialogResult.Yes)return;
             Directory.CreateDirectory(UpdateDirectory);
             string staged=Path.Combine(UpdateDirectory,"Oneko-"+Guid.NewGuid().ToString("N")+".exe");
