@@ -13,8 +13,8 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("NekoCat By Mauro")]
 [assembly: AssemblyProduct("NekoCat By Mauro")]
 [assembly: AssemblyDescription("Mascotas animadas para el escritorio")]
-[assembly: AssemblyVersion("2.0.1.0")]
-[assembly: AssemblyFileVersion("2.0.1.0")]
+[assembly: AssemblyVersion("2.0.4.0")]
+[assembly: AssemblyFileVersion("2.0.4.0")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7.2", FrameworkDisplayName=".NET Framework 4.7.2")]
 
 internal static class Program
@@ -122,10 +122,10 @@ internal sealed class CatForm : SpriteOverlay
     static void SortPetMenu(ToolStripMenuItem parent){var items=new List<ToolStripItem>();foreach(ToolStripItem item in parent.DropDownItems)items.Add(item);items.Sort(delegate(ToolStripItem a,ToolStripItem b){return string.Compare(a.Text,b.Text,StringComparison.CurrentCultureIgnoreCase);});parent.DropDownItems.Clear();parent.DropDownItems.AddRange(items.ToArray());}
     void BuildMenu()
     {
-        menu.Items.Add(new ToolStripMenuItem("NekoCat By Mauro · 2.0.1 · "+settings.Name) {Enabled=false});
+        menu.Items.Add(new ToolStripMenuItem("NekoCat By Mauro · 2.0.4 · "+settings.Name) {Enabled=false});
         menu.Items.Add("Ponerle nombre…",null,delegate{
             renaming=true;string name;try{name=NamePrompt.Ask(settings.Name);}finally{renaming=false;}
-            if(name!=null){settings.Name=name;menu.Items[0].Text="NekoCat By Mauro · 2.0.1 · "+name;UpdateTrayText();Save();DrawBadge();}
+            if(name!=null){settings.Name=name;menu.Items[0].Text="NekoCat By Mauro · 2.0.4 · "+name;UpdateTrayText();Save();DrawBadge();}
         });
         showName.Checked=settings.ShowName;showName.CheckOnClick=true;
         showName.CheckedChanged+=delegate{settings.ShowName=showName.Checked;Save();DrawBadge();};menu.Items.Add(showName);
@@ -488,7 +488,7 @@ internal sealed class WelcomeToast : Form
     public WelcomeToast(Icon catIcon)
     {
         icon = (Icon)catIcon.Clone();
-        Text = "NekoCat By Mauro 2.0.1";
+        Text = "NekoCat By Mauro 2.0.4";
         AutoScaleMode = AutoScaleMode.None;
         FormBorderStyle = FormBorderStyle.None;
         ShowInTaskbar = false;
@@ -524,7 +524,7 @@ internal sealed class WelcomeToast : Form
         using (var muted = new SolidBrush(Color.FromArgb(116,104,104)))
         using (var border = new Pen(Color.FromArgb(228,212,198)))
         {
-            e.Graphics.DrawString("NekoCat By Mauro 2.0.1",title,ink,64,18);
+            e.Graphics.DrawString("NekoCat By Mauro 2.0.4",title,ink,64,18);
             e.Graphics.DrawString("Tu mascota ya está aquí.",caption,muted,66,46);
             e.Graphics.DrawRectangle(border,0,0,Width-1,Height-1);
         }

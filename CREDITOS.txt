@@ -1,4 +1,4 @@
-NEKOCAT BY MAURO 2.0.1
+NEKOCAT BY MAURO 2.0.4
 Nombre anterior: Oneko By Mau.
 
 ONEKO ESCRITORIO
@@ -78,3 +78,10 @@ proyecto. Proyecto de fans sin afiliacion oficial a sus titulares.
 
 Version 2.0.1: las primeras 19 mascotas importadas usan cuadros elegidos
 para mantener una orientacion estable al caminar.
+
+Version 2.0.2: corregida la orientacion de las mascotas importadas al caminar hacia arriba.
+
+Version 2.0.3: las mascotas usan la pose frontal de referencia al caminar hacia arriba.
+
+Version 2.0.4: hojas importadas limitadas a cuadros de subida de espaldas,
+laterales animados y avance frontal; se conservan las poses de reposo.

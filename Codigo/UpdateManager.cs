@@ -70,19 +70,19 @@ internal static class UpdateManager
         if(assets==null)throw new InvalidDataException("La versión publicada no contiene archivos.");
         foreach(object item in assets){
             var asset=item as Dictionary<string,object>;
-            if(asset==null || !asset.ContainsKey("name") || Convert.ToString(asset["name"])!="Oneko.exe")continue;
+            if(asset==null || !asset.ContainsKey("name") || Convert.ToString(asset["name"])!="NekoCat.exe")continue;
             string digest=Convert.ToString(asset["digest"]);string download=Convert.ToString(asset["browser_download_url"]);
             Uri url;long size=Convert.ToInt64(asset["size"]);
             string prefix="/"+owner+"/"+repo+"/releases/download/";
             if(!Uri.TryCreate(download,UriKind.Absolute,out url) || url.Scheme!="https" ||
                !url.Host.Equals("github.com",StringComparison.OrdinalIgnoreCase) ||
                !url.AbsolutePath.StartsWith(prefix,StringComparison.OrdinalIgnoreCase) ||
-               !url.AbsolutePath.EndsWith("/Oneko.exe",StringComparison.OrdinalIgnoreCase) ||
+               !url.AbsolutePath.EndsWith("/NekoCat.exe",StringComparison.OrdinalIgnoreCase) ||
                size<10000 || size>30*1024*1024 || digest==null || !Regex.IsMatch(digest,@"^sha256:[0-9a-fA-F]{64}$"))
                 throw new InvalidDataException("El archivo publicado no tiene una descarga o una huella SHA-256 válida.");
             return new Release {Version=version,Url=url,Digest=digest.Substring(7).ToLowerInvariant(),Size=size};
         }
-        throw new InvalidDataException("La versión publicada debe incluir Oneko.exe como archivo adjunto.");
+        throw new InvalidDataException("La versión publicada debe incluir NekoCat.exe como archivo adjunto.");
     }
     static string Hash(string file)
     {

@@ -1,17 +1,16 @@
-PUBLICAR NEKOCAT BY MAURO 2.0.1
+PUBLICAR NEKOCAT BY MAURO 2.0.4
 Repositorio: https://github.com/Mauroleki/neko-by-mauro
 
 1. Ejecuta Codigo/COMPILAR.cmd. Compila NekoCat.exe y una copia Oneko.exe.
-2. Crea una Release estable v2.0.1 con titulo NekoCat By Mauro 2.0.1.
-3. Adjunta NekoCat.exe, Oneko.exe (mismos bytes) y NekoCat By Mauro.zip.
-4. Oneko.exe es obligatorio para las instalaciones existentes de 1.8.
-   No lo renombres ni lo omitas. Debe ocupar menos de 30 MiB.
+2. Crea una Release estable v2.0.4 con titulo NekoCat By Mauro 2.0.4.
+3. Adjunta solo NekoCat.exe y NekoCat-By-Mauro-2.0.4.zip.
+4. NekoCat.exe debe ocupar menos de 30 MiB; es el archivo que usa el actualizador.
 5. Publica como Latest, no borrador ni prerelease.
 
 Para futuras versiones aumenta AssemblyVersion, AssemblyFileVersion y
-el numero del mensaje de apertura. Conserva el asset Oneko.exe mientras
-haya versiones compatibles que lo busquen. El actualizador admite como
-launcher local tanto Oneko.exe como NekoCat.exe.
+el numero del mensaje de apertura. El actualizador nuevo descarga NekoCat.exe. Instalaciones previas a la
+version 2.0.4 pueden requerir que el usuario descargue esta version manualmente,
+porque sus actualizadores anteriores buscaban Oneko.exe.
 
 El ZIP de nuevas instalaciones solo necesita NekoCat.exe en la raiz.
 Los ajustes y la clave de inicio automatico conservan sus identificadores

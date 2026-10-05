@@ -1,4 +1,4 @@
-NEKOCAT BY MAURO 2.0.1
+NEKOCAT BY MAURO 2.0.4
 
 INICIO RAPIDO
 1. Cierra la version anterior desde su icono junto al reloj > Salir.
@@ -19,10 +19,10 @@ Charmander y Kirby usan las hojas nuevas completas; no aparecen duplicados.
 ACTUALIZAR
 La app consulta GitHub al abrir y cada 15 minutos. Si hay una Release
 estable superior, pregunta si quieres actualizar y conserva tus ajustes.
-Para compatibilidad con 1.8, GitHub incluye tambien Oneko.exe con los
-mismos bytes que NekoCat.exe. Los usuarios que actualicen desde 1.8
-conservaran ese nombre de archivo, pero veran NekoCat By Mauro 2.0.1.
-No hace falta mover los ajustes ni volver a configurar tus mascotas.
+La descarga publicada en GitHub es NekoCat.exe. Las versiones anteriores
+a 2.0.4 buscaban Oneko.exe y pueden necesitar esta descarga manual inicial.
+Desde la 2.0.4 el actualizador busca NekoCat.exe. Los ajustes y mascotas
+guardadas se conservan al abrir la nueva copia.
 
 CARPETAS
 Codigo: fuentes y COMPILAR.cmd.
@@ -32,10 +32,10 @@ Vistas previas: muestras de los personajes.
 Licencias: creditos del motor original.
 
 INSTRUCCIONES DE FUNCIONES Y VERSIONES ANTERIORES
-NEKOCAT BY MAURO - 2.0.1 - WINDOWS 10 / 11
+NEKOCAT BY MAURO - 2.0.4 - WINDOWS 10 / 11
 
 QUE ABRIR
-- Oneko.exe: abre el gato. Esta en esta misma carpeta.
+- NekoCat.exe: abre el gato. Esta en esta misma carpeta.
 - LEEME.txt: instrucciones y opciones.
 - CREDITOS.txt: autores y procedencia de los dibujos.
 - Codigo: codigo fuente y COMPILAR.cmd, solo para quien quiera compilar.
@@ -50,7 +50,7 @@ ABRIR O ACTUALIZAR
    al reloj de Windows > Salir. Si no lo ves, abre la flecha ^.
 2. Extrae este ZIP: clic derecho > Extraer todo.
 3. Abre Oneko.exe en la carpeta extraida.
-4. Aparece "NekoCat By Mauro 2.0.1" durante 3 segundos y empieza el seguimiento.
+4. Aparece "NekoCat By Mauro 2.0.4" durante 3 segundos y empieza el seguimiento.
    No necesitas compilar, instalar Python ni usar Vencord.
 
 TODOS LOS CONTROLES: CLIC DERECHO EN EL ICONO JUNTO AL RELOJ

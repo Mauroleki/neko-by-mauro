@@ -1,4 +1,4 @@
-using System;using System.IO;using System.Drawing;using System.Drawing.Drawing2D;using System.Drawing.Imaging;using System.Reflection;
+using System;using System.IO;using System.Drawing;using System.Reflection;
 internal static class PetCatalog {
  public static readonly string[] Names = {
   "Blanco clásico",
@@ -169,24 +169,32 @@ internal static class PetCatalog {
   "pets.Videojuegos.Yoru.png"
  };
  public static bool HasAtlas(int design){return design>=0&&design<Resources.Length&&Resources[design]!=null;}
- public static Bitmap Load(int design){using(Stream stream=Assembly.GetExecutingAssembly().GetManifestResourceStream(Resources[design])){if(stream==null)throw new FileNotFoundException("Faltan los sprites de "+Names[design]);using(var source=new Bitmap(stream)){if(source.Width!=1024||source.Height!=512)throw new InvalidDataException("Hoja de sprites incompleta: "+Names[design]);return design>=18&&design<37?NormalizeWalking(source):new Bitmap(source);}}}
- // The first 19 user-supplied sheets are pose collections, not Oneko's
- // directional atlas. Keep the first frame in each walk direction and reuse it
- // for its alternating step; unused poses can otherwise turn the character.
- static Bitmap NormalizeWalking(Bitmap source){
-  var result=new Bitmap(source.Width,source.Height,PixelFormat.Format32bppArgb);
-  using(var g=Graphics.FromImage(result)){
-   g.CompositingMode=CompositingMode.SourceCopy;g.InterpolationMode=InterpolationMode.NearestNeighbor;g.PixelOffsetMode=PixelOffsetMode.Half;
-   g.DrawImage(source,new Rectangle(0,0,source.Width,source.Height),0,0,source.Width,source.Height,GraphicsUnit.Pixel);
-   CopyPair(g,source,3,0,3,1);CopyPair(g,source,1,2,1,3);
-   CopyPair(g,source,0,2,0,3);CopyPair(g,source,5,1,5,2);
-   CopyPair(g,source,6,3,7,2);CopyPair(g,source,5,3,6,1);
-   CopyPair(g,source,4,2,4,3);CopyPair(g,source,1,0,1,1);
-  }
+ public static Bitmap Load(int design){using(Stream stream=Assembly.GetExecutingAssembly().GetManifestResourceStream(Resources[design])){if(stream==null)throw new FileNotFoundException("Faltan los sprites de "+Names[design]);using(var source=new Bitmap(stream)){if(source.Width!=1024||source.Height!=512)throw new InvalidDataException("Hoja de sprites incompleta: "+Names[design]);return design>=16?NormalizeWalking(source,design):new Bitmap(source);}}}
+ // Remap the movement poses to the engine's direction cells. The provided sheets
+ // are pose boards, so their original positions do not match Oneko's atlas layout.
+ // Keep the two real back-facing frames for north, two side frames for east/west,
+  // and two front-facing frames for south. Other cells (idle, sleep, scratching)
+ // are left as supplied.
+ static Bitmap NormalizeWalking(Bitmap source,int design){
+  var result=new Bitmap(source);
+   int bx=0,by=1,b2x=1,b2y=1,sx=1,sy=0,s2x=3,s2y=0,fx=1,fy=2,f2x=3,f2y=3;
+   if(design==16){bx=0;by=1;b2x=1;b2y=2;sx=0;sy=3;s2x=2;s2y=3;}
+   if(design==17){bx=1;by=1;b2x=1;b2y=3;sx=2;sy=2;s2x=2;s2y=3;fx=0;fy=0;f2x=6;f2y=0;}
+   CopyPair(result,source,bx,by,b2x,b2y,1,2,1,3,false); // N
+   CopyPair(result,source,bx,by,b2x,b2y,0,2,0,3,false); // NE
+   CopyPair(result,source,bx,by,b2x,b2y,1,0,1,1,true);  // NW
+   CopyPair(result,source,sx,sy,s2x,s2y,3,0,3,1,false); // E
+   CopyPair(result,source,sx,sy,s2x,s2y,4,2,4,3,true);  // W
+   CopyPair(result,source,fx,fy,f2x,f2y,6,3,7,2,false); // S
+   CopyPair(result,source,fx,fy,f2x,f2y,5,1,5,2,false); // SE
+   CopyPair(result,source,fx,fy,f2x,f2y,5,3,6,1,true);  // SW
   return result;
  }
- static void CopyPair(Graphics g,Bitmap source,int x1,int y1,int x2,int y2){
-  var src=new Rectangle(x1*128,y1*128,128,128);var dst=new Rectangle(x2*128,y2*128,128,128);
-  g.DrawImage(source,dst,src,GraphicsUnit.Pixel);
+ static void CopyPair(Bitmap result,Bitmap source,int ax,int ay,int bx,int by,int dx1,int dy1,int dx2,int dy2,bool flip){
+  CopyPose(result,source,ax,ay,dx1,dy1,flip);CopyPose(result,source,bx,by,dx2,dy2,flip);
+ }
+ static void CopyPose(Bitmap result,Bitmap source,int sx,int sy,int dx,int dy,bool flip){
+  int s=sx*128,d=dx*128,st=sy*128,dt=dy*128;
+  for(int y=0;y<128;y++)for(int x=0;x<128;x++)result.SetPixel(d+x,dt+y,source.GetPixel(s+(flip?127-x:x),st+y));
  }
 }
