@@ -13,9 +13,8 @@ internal sealed class PetSettings
     public string Name = "Oneko";
     public int Design, Scale = 1;
     public bool Independent, ShowName = true, AutoSleep = true;
-    public int Slot, CatCount=1, Accessory, PetCount;
-    public bool Sounds, KeyboardReaction=true, DailyRoutine=true, Entrance=true, EdgePeek=true, Surprises=true;
-    public string Objects="";
+    public int Slot, CatCount=1, PetCount;
+    public bool Sounds, KeyboardReaction=true, DailyRoutine=true, Entrance=true, EdgePeek=true;
     string FilePath { get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"OnekoByMau",Slot==0?"settings.xml":"cat"+(Slot+1)+".xml"); } }
     public static PetSettings Load(int slot=0)
     {
@@ -31,15 +30,12 @@ internal sealed class PetSettings
             s.ShowName = r.GetAttribute("showName") != "false";
             s.AutoSleep = r.GetAttribute("autoSleep") != "false";
             if(int.TryParse(r.GetAttribute("catCount"),out n))s.CatCount=Math.Max(1,Math.Min(4,n));
-            if(int.TryParse(r.GetAttribute("accessory"),out n))s.Accessory=Math.Max(0,Math.Min(4,n));
             if(int.TryParse(r.GetAttribute("petCount"),out n))s.PetCount=Math.Max(0,n);
             s.Sounds=r.GetAttribute("sounds")=="true";
             s.KeyboardReaction=r.GetAttribute("keyboardReaction")!="false";
             s.DailyRoutine=r.GetAttribute("dailyRoutine")!="false";
             s.Entrance=r.GetAttribute("entrance")!="false";
             s.EdgePeek=r.GetAttribute("edgePeek")!="false";
-            s.Surprises=r.GetAttribute("surprises")!="false";
-            s.Objects=r.GetAttribute("objects");
         } catch (IOException) { } catch (UnauthorizedAccessException) { } catch (XmlException) { }
         return s;
     }
@@ -59,11 +55,10 @@ internal sealed class PetSettings
             r.SetAttribute("name",Name); r.SetAttribute("design",Design.ToString()); r.SetAttribute("scale",Scale.ToString());
             r.SetAttribute("independent",Independent ? "true":"false");
             r.SetAttribute("showName",ShowName ? "true":"false"); r.SetAttribute("autoSleep",AutoSleep ? "true":"false");
-            r.SetAttribute("catCount",CatCount.ToString());r.SetAttribute("accessory",Accessory.ToString());r.SetAttribute("petCount",PetCount.ToString());
+            r.SetAttribute("catCount",CatCount.ToString());r.SetAttribute("petCount",PetCount.ToString());
             r.SetAttribute("sounds",Sounds?"true":"false");r.SetAttribute("keyboardReaction",KeyboardReaction?"true":"false");
             r.SetAttribute("dailyRoutine",DailyRoutine?"true":"false");r.SetAttribute("entrance",Entrance?"true":"false");
-            r.SetAttribute("edgePeek",EdgePeek?"true":"false");r.SetAttribute("surprises",Surprises?"true":"false");
-            r.SetAttribute("objects",Objects??"");
+            r.SetAttribute("edgePeek",EdgePeek?"true":"false");
             string temp = FilePath + ".tmp"; doc.Save(temp);
             if (File.Exists(FilePath)) File.Replace(temp,FilePath,null); else File.Move(temp,FilePath);
             return true;

@@ -1,4 +1,4 @@
-NEKOCAT BY MAURO 2.0.4
+NEKOCAT BY MAURO 2.0.5
 
 INICIO RAPIDO
 1. Cierra la version anterior desde su icono junto al reloj > Salir.
@@ -31,8 +31,8 @@ Sistema: actualizador y canal de GitHub.
 Vistas previas: muestras de los personajes.
 Licencias: creditos del motor original.
 
-INSTRUCCIONES DE FUNCIONES Y VERSIONES ANTERIORES
-NEKOCAT BY MAURO - 2.0.4 - WINDOWS 10 / 11
+GUIA DETALLADA DE FUNCIONES Y VERSIONES ANTERIORES
+NEKOCAT BY MAURO - 2.0.5 - WINDOWS 10 / 11
 
 QUE ABRIR
 - NekoCat.exe: abre el gato. Esta en esta misma carpeta.
@@ -50,7 +50,7 @@ ABRIR O ACTUALIZAR
    al reloj de Windows > Salir. Si no lo ves, abre la flecha ^.
 2. Extrae este ZIP: clic derecho > Extraer todo.
 3. Abre Oneko.exe en la carpeta extraida.
-4. Aparece "NekoCat By Mauro 2.0.4" durante 3 segundos y empieza el seguimiento.
+4. Aparece "NekoCat By Mauro 2.0.5" durante 3 segundos y empieza el seguimiento.
    No necesitas compilar, instalar Python ni usar Vencord.
 
 TODOS LOS CONTROLES: CLIC DERECHO EN EL ICONO JUNTO AL RELOJ
@@ -88,7 +88,7 @@ DORMIR SOBRE VENTANAS
   que lo despiertes o la ventana deje de servir como apoyo.
 - Si no hay un borde adecuado, no fuerza el descanso.
 
-TIPOS DE GATO
+MASCOTAS
 - Tipo de gato > Blanco clasico, Naranjita, Gris humo, Negrito, Crema,
   Rosa pastel, Lavanda, Azul cielo, Siames, Atigrado naranja,
   Atigrado gris, Calico, Esmoquin, Karnalito (VALORANT) o
@@ -111,11 +111,11 @@ OTROS CONTROLES
 - "Traer junto al cursor" recupera al gato.
 - "Pausar" detiene el movimiento pero no oculta al gato.
 - Doble clic en el icono de la bandeja: pausa/reanuda.
-- "Salir" cierra todos los gatos, los juguetes y los objetos.
+- "Salir" cierra todos los gatos y los juguetes.
 
 AJUSTES
-Los nombres, visibilidad, disenos, accesorios, tamanos, caricias,
-numero de gatos, objetos y opciones se guardan localmente en:
+Los nombres, visibilidad, disenos, tamanos, caricias, numero de gatos y
+opciones se guardan localmente en:
 %LOCALAPPDATA%\OnekoByMau\settings.xml
 Los gatos adicionales usan cat2.xml, cat3.xml y cat4.xml en esa carpeta.
 Juguetes, pausa y descanso manual se reinician al abrir.
@@ -207,27 +207,11 @@ Codigo\StartupManager.cs contiene esta funcion. La compilacion se realizo con
 referencias oficiales de .NET Framework para Windows. El inicio real
 de sesion debe comprobarse en tu PC.
 
-ONEKO BY MAU 1.4 - NUEVAS FUNCIONES
-- "Varios gatos" agrega hasta cuatro gatos, o quita el ultimo. Cada gato
-  tiene su propio icono junto al reloj: haz clic derecho en el icono
-  correspondiente para ponerle nombre, cambiar diseno, tamano y accesorio.
-  Todos los gatos comparten los juguetes y objetos del escritorio.
-- "Objetos del escritorio" pone un comedero, agua, caja de carton, casita
-  y camita donde esta el cursor. Arrastra cada objeto con el boton izquierdo
-  para moverlo. Puedes volver a colocarlo desde el menu o guardar todos.
-  Cada gato puede acercarse a comer, beber, esconderse o descansar.
-  La comida y el agua vuelven a llenarse solas luego de un rato.
-- "Accesorio" permite elegir ninguno, mono, gorrito, corona o lentes por gato.
-- Despues de dormir el gato se estira. Puede reaccionar al teclado,
-  sorprenderte con un objeto encontrado, asomarse desde un borde y seguir
-  una rutina mas tranquila de noche. En "Comportamiento y sonidos" puedes
-  activar o desactivar cada opcion, incluida la entrada caminando.
-- "Sonidos suaves" esta apagado inicialmente. Al activarlo, se oyen
-  sonidos breves sintetizados en las caricias y algunas interacciones.
-- "Caricias recibidas" muestra el contador guardado de cada gato.
-- Si activaste "Iniciar con Windows" antes de actualizar, extrae este ZIP
-  en una carpeta permanente y abre su Oneko.exe una vez para actualizar
-  la ruta registrada. Los ajustes anteriores se conservan.
+FUNCIONES RETIRADAS EN LA VERSION 2.0.5
+- Se eliminaron los accesorios (mono, gorrito, corona y lentes).
+- Se eliminaron los objetos de escritorio (comedero, agua, caja, casita y camita).
+- Se eliminaron las sorpresas aleatorias de la seccion Comportamiento.
+Los ajustes antiguos de estas funciones se ignoran al guardar la configuracion.
 
 Las animaciones y la interaccion con ventanas no han podido probarse en un
 escritorio Windows desde este entorno. Si algun control se comporta raro,

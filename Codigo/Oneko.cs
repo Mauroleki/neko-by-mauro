@@ -13,8 +13,8 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("NekoCat By Mauro")]
 [assembly: AssemblyProduct("NekoCat By Mauro")]
 [assembly: AssemblyDescription("Mascotas animadas para el escritorio")]
-[assembly: AssemblyVersion("2.0.4.0")]
-[assembly: AssemblyFileVersion("2.0.4.0")]
+[assembly: AssemblyVersion("2.0.5.0")]
+[assembly: AssemblyFileVersion("2.0.5.0")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7.2", FrameworkDisplayName=".NET Framework 4.7.2")]
 
 internal static class Program
@@ -40,7 +40,6 @@ internal sealed class CatForm : SpriteOverlay
     readonly CatForm leader;
     readonly int slot;
     readonly List<CatForm> companions=new List<CatForm>();
-    readonly Dictionary<int,PetPlace> places=new Dictionary<int,PetPlace>();
     readonly Random random=new Random();
     readonly NekoEngine neko;
     readonly Bitmap original;
@@ -63,8 +62,7 @@ internal sealed class CatForm : SpriteOverlay
     IntPtr perch=IntPtr.Zero;
     double perchFraction=0.5;
     bool explicitSleep,paused,cleaned,renaming;
-    int ticks,idleTicks,sleepTicks,heartTicks,petTicks,wanderWait,kickCooldown,stretchTicks,boxTicks,placeCooldown,giftTicks,edgeTicks,lastPetCountTick=-100,sleepAtKind=-1,lastTypingTick=-300;
-    PetPlace destination;
+    int ticks,idleTicks,sleepTicks,heartTicks,petTicks,wanderWait,kickCooldown,stretchTicks,giftTicks,edgeTicks,lastPetCountTick=-100,lastTypingTick=-300;
     string gift="";
     Point lastMouse,sleepMouse,wanderGoal;
     bool hasGoal;
@@ -105,7 +103,6 @@ internal sealed class CatForm : SpriteOverlay
             if(settings.Entrance){Rectangle a=Screen.FromPoint(CatPoint).WorkingArea;neko.X=a.Left+Side/2;neko.Y=Math.Max(a.Top+Side/2,Math.Min(a.Bottom-Side/2,Cursor.Position.Y+slot*25));}
             DrawCat();timer.Start();
             if(slot==0){
-                LoadPlaces();
                 for(int i=1;i<settings.CatCount;i++)AddCat(i,false);
                 new WelcomeToast(catIcon).Show(this);
                 UpdateManager.StartWatching(this);
@@ -122,10 +119,10 @@ internal sealed class CatForm : SpriteOverlay
     static void SortPetMenu(ToolStripMenuItem parent){var items=new List<ToolStripItem>();foreach(ToolStripItem item in parent.DropDownItems)items.Add(item);items.Sort(delegate(ToolStripItem a,ToolStripItem b){return string.Compare(a.Text,b.Text,StringComparison.CurrentCultureIgnoreCase);});parent.DropDownItems.Clear();parent.DropDownItems.AddRange(items.ToArray());}
     void BuildMenu()
     {
-        menu.Items.Add(new ToolStripMenuItem("NekoCat By Mauro · 2.0.4 · "+settings.Name) {Enabled=false});
+        menu.Items.Add(new ToolStripMenuItem("NekoCat By Mauro · 2.0.5 · "+settings.Name) {Enabled=false});
         menu.Items.Add("Ponerle nombre…",null,delegate{
             renaming=true;string name;try{name=NamePrompt.Ask(settings.Name);}finally{renaming=false;}
-            if(name!=null){settings.Name=name;menu.Items[0].Text="NekoCat By Mauro · 2.0.4 · "+name;UpdateTrayText();Save();DrawBadge();}
+            if(name!=null){settings.Name=name;menu.Items[0].Text="NekoCat By Mauro · 2.0.5 · "+name;UpdateTrayText();Save();DrawBadge();}
         });
         showName.Checked=settings.ShowName;showName.CheckOnClick=true;
         showName.CheckedChanged+=delegate{settings.ShowName=showName.Checked;Save();DrawBadge();};menu.Items.Add(showName);
@@ -148,13 +145,6 @@ internal sealed class CatForm : SpriteOverlay
         toys.DropDownItems.Add("Sacar pluma",null,delegate{leader.CreateToy(3);});
         toys.DropDownItems.Add("Puntero láser (sigue el cursor)",null,delegate{leader.CreateToy(4);});
         toys.DropDownItems.Add("Guardar juguete",null,delegate{leader.RemoveToy();Wake();});menu.Items.Add(toys);
-        var accessory=new ToolStripMenuItem("Accesorio");
-        string[] accessories={"Ninguno","Moño","Gorrito","Corona","Lentes"};
-        for(int i=0;i<accessories.Length;i++){
-            int chosen=i;var item=new ToolStripMenuItem(accessories[i]){Checked=i==settings.Accessory};
-            item.Click+=delegate{settings.Accessory=chosen;foreach(ToolStripMenuItem other in accessory.DropDownItems)other.Checked=other==item;ClearFrames();Save();DrawCat();};
-            accessory.DropDownItems.Add(item);
-        }menu.Items.Add(accessory);
         menu.Items.Add("Caricias recibidas: "+settings.PetCount,null,delegate{Notice(settings.Name+" recibió "+settings.PetCount+" caricias ♥");});
         var behavior=new ToolStripMenuItem("Comportamiento y sonidos");
         AddOption(behavior,"Sonidos suaves",settings.Sounds,delegate(bool v){settings.Sounds=v;});
@@ -162,7 +152,6 @@ internal sealed class CatForm : SpriteOverlay
         AddOption(behavior,"Rutina según la hora",settings.DailyRoutine,delegate(bool v){settings.DailyRoutine=v;});
         AddOption(behavior,"Entrada caminando al iniciar",settings.Entrance,delegate(bool v){settings.Entrance=v;});
         AddOption(behavior,"Asomarse en los bordes",settings.EdgePeek,delegate(bool v){settings.EdgePeek=v;});
-        AddOption(behavior,"Sorpresas aleatorias",settings.Surprises,delegate(bool v){settings.Surprises=v;});
         menu.Items.Add(behavior);
         if(slot==0){
             var cats=new ToolStripMenuItem("Varias mascotas (máximo 4)");
@@ -170,12 +159,6 @@ internal sealed class CatForm : SpriteOverlay
             cats.DropDownItems.Add("Quitar última mascota",null,delegate{RemoveLastCat();});
             cats.DropDownItems.Add("Cada mascota tiene su propio icono, nombre, diseño y tamaño") .Enabled=false;
             menu.Items.Add(cats);
-            var objects=new ToolStripMenuItem("Objetos del escritorio");
-            for(int i=0;i<PetPlace.Names.Length;i++){
-                int kind=i;objects.DropDownItems.Add("Poner o mover: "+PetPlace.Names[i],null,delegate{Place(kind,Cursor.Position);});
-            }
-            objects.DropDownItems.Add("Guardar todos los objetos",null,delegate{ClearPlaces();});
-            menu.Items.Add(objects);
         }
         var skins=new ToolStripMenuItem("Mascotas");
         var games=new ToolStripMenuItem("Videojuegos");
@@ -252,7 +235,7 @@ internal sealed class CatForm : SpriteOverlay
         Save();
     }
     void Pet(){Wake();heartTicks=25;petTicks=20;neko.Sprite="scratchSelf";neko.SpriteFrame=ticks/2;if(ticks-lastPetCountTick>=10 || ticks<lastPetCountTick){lastPetCountTick=ticks;settings.PetCount++;Save();if(settings.Sounds)PetAudio.Play(true);}}
-    void Wake(){bool wasSleeping=perch!=IntPtr.Zero || boxTicks>0;perch=IntPtr.Zero;explicitSleep=false;sleepTicks=0;boxTicks=0;idleTicks=0;neko.ResetIdle();if(wasSleeping)stretchTicks=10;}
+    void Wake(){bool wasSleeping=perch!=IntPtr.Zero;perch=IntPtr.Zero;explicitSleep=false;sleepTicks=0;idleTicks=0;neko.ResetIdle();if(wasSleeping)stretchTicks=10;}
     void RemoveToy(){if(toy!=null){toy.Close();toy.Dispose();toy=null;}}
     void CreateToy(int kind)
     {
@@ -268,7 +251,7 @@ internal sealed class CatForm : SpriteOverlay
         CatForm cat=null;
         try {
             cat=new CatForm(index,this);cat.Show(this);companions.Add(cat);
-            if(userAction){settings.CatCount=companions.Count+1;Save();Notice("Abre el icono del nuevo gato para cambiar su nombre, diseño y accesorios.");}
+            if(userAction){settings.CatCount=companions.Count+1;Save();Notice("Abre el icono del nuevo gato para cambiar su nombre, mascota y tamaño.");}
         }catch(Exception ex){if(cat!=null)cat.Dispose();settings.CatCount=companions.Count+1;Save();MessageBox.Show("No pude agregar el gato.\n\n"+ex.Message,"NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Information);}
     }
     void RemoveLastCat()
@@ -277,27 +260,6 @@ internal sealed class CatForm : SpriteOverlay
         if(companions.Count==0){Notice("Ya queda un solo gato.");return;}
         CatForm cat=companions[companions.Count-1];companions.RemoveAt(companions.Count-1);
         cat.Close();cat.Dispose();settings.CatCount=companions.Count+1;Save();
-    }
-    void Place(int kind,Point at)
-    {
-        PetPlace old;if(places.TryGetValue(kind,out old)){old.Close();old.Dispose();places.Remove(kind);}
-        var place=new PetPlace(kind,at,SavePlaces);places[kind]=place;place.Show(this);SavePlaces();
-    }
-    void ClearPlaces(){foreach(PetPlace item in places.Values){item.Close();item.Dispose();}places.Clear();SavePlaces();}
-    void SavePlaces()
-    {
-        var s=new System.Text.StringBuilder();foreach(var pair in places){Point p=pair.Value.Center;s.Append(pair.Key).Append(':').Append(p.X).Append(':').Append(p.Y).Append(';');}
-        settings.Objects=s.ToString();Save();
-    }
-    void LoadPlaces()
-    {
-        foreach(string token in (settings.Objects??"").Split(';')){
-            string[] bits=token.Split(':');int kind,x,y;
-            if(bits.Length==3 && int.TryParse(bits[0],out kind) && int.TryParse(bits[1],out x) && int.TryParse(bits[2],out y) && kind>=0 && kind<PetPlace.Names.Length){
-                Rectangle v=SystemInformation.VirtualScreen;
-                if(v.Contains(x,y))Place(kind,new Point(x,y));
-            }
-        }
     }
     bool StartSleep(bool manual)
     {
@@ -335,15 +297,8 @@ internal sealed class CatForm : SpriteOverlay
         if(giftTicks>0)giftTicks--;
         Point mouse=Cursor.Position;
         if(paused){lastMouse=mouse;DrawBadge();return;}
-        if(slot==0)foreach(PetPlace p in places.Values)p.Step();
         if(kickCooldown>0)kickCooldown--;
-        if(placeCooldown>0)placeCooldown--;
-        if(settings.Surprises && ticks%280==0 && random.Next(4)==0){
-            string[] gifts={"★ Encontró una estrella","✿ Encontró una flor","♥ Encontró un corazón","◆ Encontró una joyita"};
-            gift=gifts[random.Next(gifts.Length)];giftTicks=65;if(settings.Sounds)PetAudio.Play(false);
-        }
         if(petTicks>0){petTicks--;neko.Sprite="scratchSelf";neko.SpriteFrame=ticks/2;DrawCat();lastMouse=mouse;return;}
-        if(boxTicks>0){boxTicks--;neko.Sprite="sleeping";neko.SpriteFrame=ticks/4;DrawCat();if(boxTicks==0){stretchTicks=10;sleepAtKind=-1;}lastMouse=mouse;return;}
         if(stretchTicks>0){stretchTicks--;neko.Sprite="tired";neko.SpriteFrame=0;DrawCat();lastMouse=mouse;return;}
         if(edgeTicks>0){edgeTicks--;neko.Sprite="alert";neko.SpriteFrame=0;DrawCat();lastMouse=mouse;return;}
         if(petMode.Checked && Math.Abs(mouse.X-neko.X)<Side/2+10 && Math.Abs(mouse.Y-neko.Y)<Side/2+10 && perch==IntPtr.Zero){
@@ -373,28 +328,6 @@ internal sealed class CatForm : SpriteOverlay
         if(settings.KeyboardReaction && ticks%5==0 && KeyboardBusy() && Native.GetForegroundWindow()!=Handle){
             if(settings.Independent){wanderGoal=mouse;hasGoal=true;wanderWait=0;}
             if(ticks-lastTypingTick>=300 || ticks<lastTypingTick){lastTypingTick=ticks;gift="⌨ ¿Qué escribes?";giftTicks=25;}
-        }
-        PetPlace goal=destination;
-        if(goal!=null && (goal.IsDisposed || goal.EmptyTicks>0 || goal.Dragging || placeCooldown>0)){goal=null;destination=null;}
-        if(goal==null && (settings.Independent || mouse==lastMouse) && placeCooldown==0 && leader.places.Count>0 && ticks%120==0){
-            double best=double.MaxValue;
-            foreach(PetPlace p in leader.places.Values){
-                if(p.EmptyTicks>0 || p.Dragging)continue;
-                Point pos=p.Center;double dx=pos.X-neko.X,dy=pos.Y-neko.Y,d=dx*dx+dy*dy;
-                if(d<best){best=d;goal=p;}
-            }
-            destination=goal;
-        }
-        if(goal!=null){
-            Point goalPosition=goal.Center;Rectangle targetArea=Screen.FromPoint(goalPosition).WorkingArea;neko.StopDistance=18*settings.Scale;
-            neko.Tick(goalPosition.X,goalPosition.Y,targetArea.Left,targetArea.Top,targetArea.Right,targetArea.Bottom);
-            if(Math.Abs(neko.X-goalPosition.X)+Math.Abs(neko.Y-goalPosition.Y)<Side/2+20){
-                destination=null;
-                placeCooldown=goal.Kind<=1?500:280;
-                if(goal.Kind<=1){goal.Use();if(settings.Sounds)PetAudio.Play(true);}
-                else {boxTicks=goal.Kind==2?80:goal.Kind==3?60:95;sleepAtKind=goal.Kind;neko.X=goalPosition.X;neko.Y=goalPosition.Y;}
-            }
-            DrawCat();lastMouse=mouse;return;
         }
         if(settings.Independent){
             if(!hasGoal && wanderWait<=0){
@@ -433,20 +366,9 @@ internal sealed class CatForm : SpriteOverlay
             g.PixelOffsetMode=PixelOffsetMode.Half;
             using(Bitmap tile=sheet.Clone(new Rectangle(cell.X*cellSize,cell.Y*cellSize,cellSize,cellSize),PixelFormat.Format32bppArgb))
                 g.DrawImage(tile,new Rectangle(0,0,Side,Side),0,0,cellSize,cellSize,GraphicsUnit.Pixel);
-            if(settings.Accessory!=0){
-                g.CompositingMode=CompositingMode.SourceOver;
-                float s=Side/32f;using(var red=new SolidBrush(Color.FromArgb(231,90,116)))using(var gold=new SolidBrush(Color.FromArgb(251,197,52)))
-                using(var dark=new Pen(Color.FromArgb(64,49,70),Math.Max(1,s*2))){
-                    if(settings.Accessory==1){g.FillEllipse(red,4*s,2*s,8*s,7*s);g.FillEllipse(red,19*s,2*s,8*s,7*s);g.FillEllipse(gold,14*s,4*s,5*s,5*s);}
-                    else if(settings.Accessory==2){g.FillRectangle(red,9*s,0,15*s,6*s);g.FillRectangle(red,5*s,5*s,22*s,3*s);}
-                    else if(settings.Accessory==3){g.FillPolygon(gold,new PointF[]{new PointF(5*s,7*s),new PointF(7*s,0),new PointF(12*s,5*s),new PointF(17*s,0),new PointF(22*s,5*s),new PointF(26*s,0),new PointF(27*s,7*s)});}
-                    else if(settings.Accessory==4){g.DrawEllipse(dark,6*s,10*s,9*s,7*s);g.DrawEllipse(dark,18*s,10*s,9*s,7*s);g.DrawLine(dark,15*s,13*s,18*s,13*s);}
-                }
-            }
         }frames.Add(key,b);return b;
     }
     void DrawCat(){
-        if(boxTicks>0 && sleepAtKind==2){using(var empty=new Bitmap(Side,Side,PixelFormat.Format32bppPArgb))Present(empty,(int)neko.X-Side/2,(int)neko.Y-Side/2);badge.Hide();return;}
         Present(GetFrame(),(int)Math.Round(neko.X)-Side/2,(int)Math.Round(neko.Y)-Side/2);DrawBadge();
     }
     void DrawBadge()
@@ -477,7 +399,7 @@ internal sealed class CatForm : SpriteOverlay
     }
     protected override void Dispose(bool disposing)
     {
-        if(disposing && !cleaned){cleaned=true;timer.Stop();timer.Dispose();if(slot==0){foreach(CatForm c in companions)c.Dispose();companions.Clear();foreach(PetPlace p in places.Values)p.Dispose();places.Clear();}RemoveToy();badge.Dispose();tray.Visible=false;tray.Dispose();menu.Dispose();ClearFrames();if(catIcon!=null)catIcon.Dispose();if(sheet!=null)sheet.Dispose();if(original!=null)original.Dispose();}
+        if(disposing && !cleaned){cleaned=true;timer.Stop();timer.Dispose();if(slot==0){foreach(CatForm c in companions)c.Dispose();companions.Clear();}RemoveToy();badge.Dispose();tray.Visible=false;tray.Dispose();menu.Dispose();ClearFrames();if(catIcon!=null)catIcon.Dispose();if(sheet!=null)sheet.Dispose();if(original!=null)original.Dispose();}
         base.Dispose(disposing);
     }
 }
@@ -488,7 +410,7 @@ internal sealed class WelcomeToast : Form
     public WelcomeToast(Icon catIcon)
     {
         icon = (Icon)catIcon.Clone();
-        Text = "NekoCat By Mauro 2.0.4";
+        Text = "NekoCat By Mauro 2.0.5";
         AutoScaleMode = AutoScaleMode.None;
         FormBorderStyle = FormBorderStyle.None;
         ShowInTaskbar = false;
@@ -497,41 +419,73 @@ internal sealed class WelcomeToast : Form
         BackColor = Color.FromArgb(252,247,240);
         ClientSize = new Size(360,82);
         DoubleBuffered = true;
-        Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
-        Location = new Point(area.Right - Width - 20,area.Bottom - Height - 20);
-        closeTimer.Interval = 3000;
-        closeTimer.Tick += delegate { Close(); };
-        Shown += delegate { closeTimer.Start(); };
-        MouseClick += delegate { Close(); };
+…3856 tokens truncated…VX)*0.8;}
+            if(Y<r.Top+14){Y=r.Top+14;VY=Math.Abs(VY)*0.8;}
+            if(Y>r.Bottom-14){Y=r.Bottom-14;VY=-Math.Abs(VY)*0.8;}
+        }
+        DrawToy();
     }
-    protected override bool ShowWithoutActivation { get { return true; } }
-    protected override CreateParams CreateParams
+    void DrawToy()
     {
-        get { CreateParams p = base.CreateParams; p.ExStyle |= 0x80 | 0x08000000; return p; }
-    }
-    protected override void WndProc(ref Message m)
-    {
-        if (m.Msg == 0x21) { m.Result = new IntPtr(3); return; }
-        base.WndProc(ref m);
-    }
-    protected override void OnPaint(PaintEventArgs e)
-    {
-        base.OnPaint(e);
-        e.Graphics.DrawIcon(icon,new Rectangle(17,25,32,32));
-        using (var title = new Font("Segoe UI",13,FontStyle.Bold))
-        using (var caption = new Font("Segoe UI",9))
-        using (var ink = new SolidBrush(Color.FromArgb(51,43,43)))
-        using (var muted = new SolidBrush(Color.FromArgb(116,104,104)))
-        using (var border = new Pen(Color.FromArgb(228,212,198)))
-        {
-            e.Graphics.DrawString("NekoCat By Mauro 2.0.4",title,ink,64,18);
-            e.Graphics.DrawString("Tu mascota ya está aquí.",caption,muted,66,46);
-            e.Graphics.DrawRectangle(border,0,0,Width-1,Height-1);
+        using(var b=new Bitmap(28,28,PixelFormat.Format32bppPArgb))using(Graphics g=Graphics.FromImage(b)){
+            g.SmoothingMode=SmoothingMode.AntiAlias;
+            using(var fill=new SolidBrush(kind==1?Color.FromArgb(173,127,219):kind==2?Color.FromArgb(195,220,146):kind==3?Color.FromArgb(236,113,161):kind==4?Color.Red:Color.FromArgb(243,162,63)))
+            using(var outline=new Pen(kind==1?Color.FromArgb(91,58,130):Color.FromArgb(123,68,28),2)){
+                g.FillEllipse(fill,3,3,21,21);g.DrawEllipse(outline,3,3,21,21);
+                if(kind==1){g.DrawArc(outline,6,4,10,19,70,240);g.DrawArc(outline,11,4,10,19,100,230);g.DrawArc(outline,3,8,21,10,0,180);}
+                else if(kind==2){g.FillEllipse(Brushes.Pink,17,8,7,5);g.DrawArc(outline,1,10,13,11,45,220);}
+                else if(kind==3){g.DrawLine(outline,4,24,15,14);g.DrawLine(outline,15,14,22,5);}
+                else if(kind==4){g.FillEllipse(Brushes.Red,9,9,10,10);}
+                else {g.DrawLine(outline,7,7,21,21);g.DrawArc(outline,4,5,17,15,10,165);}
+                g.FillEllipse(Brushes.White,7,6,4,3);
+            }
+            Present(b,(int)X-14,(int)Y-14);
         }
     }
-    protected override void Dispose(bool disposing)
+}
+
+internal static class WindowPerch
+{
+    public static bool Bounds(IntPtr hwnd,out Rectangle bounds)
     {
-        if (disposing) { closeTimer.Dispose(); icon.Dispose(); }
-        base.Dispose(disposing);
+        bounds=Rectangle.Empty;
+        if(hwnd==IntPtr.Zero || !Native.IsWindow(hwnd) || !Native.IsWindowVisible(hwnd) || Native.IsIconic(hwnd))return false;
+        int cloaked;
+        if(Native.DwmGetWindowAttribute(hwnd,14,out cloaked,4)==0 && cloaked!=0)return false;
+        Native.RECT r;
+        if(Native.DwmGetWindowAttributeRect(hwnd,9,out r,16)!=0 && !Native.GetWindowRect(hwnd,out r))return false;
+        bounds=Rectangle.FromLTRB(r.Left,r.Top,r.Right,r.Bottom);return bounds.Width>150 && bounds.Height>90;
+    }
+    public static IntPtr Find(Point near,int catSize)
+    {
+        IntPtr chosen=IntPtr.Zero;Rectangle area=Screen.FromPoint(near).WorkingArea;
+        Native.EnumWindows(delegate(IntPtr hwnd,IntPtr unused){
+            uint pid;Native.GetWindowThreadProcessId(hwnd,out pid);
+            if(pid==Native.GetCurrentProcessId() || (Native.GetWindowLong(hwnd,-20)&0x80)!=0)return true;
+            var name=new StringBuilder(128);Native.GetClassName(hwnd,name,128);
+            if(name.ToString()=="Progman" || name.ToString()=="WorkerW" || name.ToString()=="Shell_TrayWnd")return true;
+            Rectangle r;
+            if(!Bounds(hwnd,out r) || r.Top<area.Top+catSize+12 || r.Top>area.Bottom-40 || r.Right<area.Left+catSize || r.Left>area.Right-catSize)return true;
+            chosen=hwnd;return false;
+        },IntPtr.Zero);
+        return chosen;
+    }
+}
+
+internal static class NamePrompt
+{
+    public static string Ask(string current)
+    {
+        using(var dialog=new Form())using(var input=new TextBox())using(var ok=new Button())using(var cancel=new Button())using(var label=new Label()){
+            dialog.Text="Nombre de tu gato";dialog.ClientSize=new Size(330,140);dialog.FormBorderStyle=FormBorderStyle.FixedDialog;
+            dialog.MaximizeBox=false;dialog.MinimizeBox=false;dialog.StartPosition=FormStartPosition.CenterScreen;dialog.TopMost=true;
+            label.Text="¿Cómo se llama? (máximo 20 caracteres)";label.SetBounds(16,16,300,24);
+            input.Text=current;input.MaxLength=20;input.SetBounds(16,47,296,26);
+            ok.Text="Guardar";ok.DialogResult=DialogResult.OK;ok.SetBounds(128,92,88,30);
+            cancel.Text="Cancelar";cancel.DialogResult=DialogResult.Cancel;cancel.SetBounds(224,92,88,30);
+            dialog.Controls.AddRange(new Control[]{label,input,ok,cancel});dialog.AcceptButton=ok;dialog.CancelButton=cancel;
+            dialog.Shown+=delegate{input.Focus();input.SelectAll();};
+            return dialog.ShowDialog()==DialogResult.OK ? PetSettings.CleanName(input.Text):null;
+        }
     }
 }

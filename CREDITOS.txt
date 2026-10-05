@@ -1,4 +1,4 @@
-NEKOCAT BY MAURO 2.0.4
+NEKOCAT BY MAURO 2.0.5
 Nombre anterior: Oneko By Mau.
 
 ONEKO ESCRITORIO
@@ -85,3 +85,6 @@ Version 2.0.3: las mascotas usan la pose frontal de referencia al caminar hacia 
 
 Version 2.0.4: hojas importadas limitadas a cuadros de subida de espaldas,
 laterales animados y avance frontal; se conservan las poses de reposo.
+
+Version 2.0.5: se retiraron los accesorios, objetos de escritorio y
+sorpresas aleatorias.
