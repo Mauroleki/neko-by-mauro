@@ -1,4 +1,4 @@
-NEKOCAT BY MAURO 2.0.5
+NEKOCAT BY MAURO 2.0.6
 
 INICIO RAPIDO
 1. Cierra la version anterior desde su icono junto al reloj > Salir.
@@ -8,6 +8,8 @@ INICIO RAPIDO
 
 MASCOTAS
 54 opciones en total, ordenadas alfabeticamente dentro de su categoria.
+La version 2.0.6 estabiliza la animacion lateral del Among Us Rojo y alinea
+la orientacion de los dos cuadros laterales en las mascotas importadas.
 Videojuegos: personajes del ZIP VideoJuegos, mas Hornet y El Caballero.
 Anime: personajes del ZIP Anime.
 Otros: personajes del ZIP Otros y subcarpeta Gatos con los 13 diseños.
@@ -32,7 +34,7 @@ Vistas previas: muestras de los personajes.
 Licencias: creditos del motor original.
 
 GUIA DETALLADA DE FUNCIONES Y VERSIONES ANTERIORES
-NEKOCAT BY MAURO - 2.0.5 - WINDOWS 10 / 11
+NEKOCAT BY MAURO - 2.0.6 - WINDOWS 10 / 11
 
 QUE ABRIR
 - NekoCat.exe: abre el gato. Esta en esta misma carpeta.
@@ -50,7 +52,7 @@ ABRIR O ACTUALIZAR
    al reloj de Windows > Salir. Si no lo ves, abre la flecha ^.
 2. Extrae este ZIP: clic derecho > Extraer todo.
 3. Abre Oneko.exe en la carpeta extraida.
-4. Aparece "NekoCat By Mauro 2.0.5" durante 3 segundos y empieza el seguimiento.
+4. Aparece "NekoCat By Mauro 2.0.6" durante 3 segundos y empieza el seguimiento.
    No necesitas compilar, instalar Python ni usar Vencord.
 
 TODOS LOS CONTROLES: CLIC DERECHO EN EL ICONO JUNTO AL RELOJ

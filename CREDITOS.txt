@@ -1,4 +1,4 @@
-NEKOCAT BY MAURO 2.0.5
+NEKOCAT BY MAURO 2.0.6
 Nombre anterior: Oneko By Mau.
 
 ONEKO ESCRITORIO
@@ -88,3 +88,6 @@ laterales animados y avance frontal; se conservan las poses de reposo.
 
 Version 2.0.5: se retiraron los accesorios, objetos de escritorio y
 sorpresas aleatorias.
+
+Version 2.0.6: movimiento lateral corregido para Among Us Rojo y cuadros
+laterales de mascotas importadas normalizados para evitar cambios de orientacion.

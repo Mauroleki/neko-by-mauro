@@ -13,8 +13,8 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("NekoCat By Mauro")]
 [assembly: AssemblyProduct("NekoCat By Mauro")]
 [assembly: AssemblyDescription("Mascotas animadas para el escritorio")]
-[assembly: AssemblyVersion("2.0.5.0")]
-[assembly: AssemblyFileVersion("2.0.5.0")]
+[assembly: AssemblyVersion("2.0.6.0")]
+[assembly: AssemblyFileVersion("2.0.6.0")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7.2", FrameworkDisplayName=".NET Framework 4.7.2")]
 
 internal static class Program
@@ -119,10 +119,10 @@ internal sealed class CatForm : SpriteOverlay
     static void SortPetMenu(ToolStripMenuItem parent){var items=new List<ToolStripItem>();foreach(ToolStripItem item in parent.DropDownItems)items.Add(item);items.Sort(delegate(ToolStripItem a,ToolStripItem b){return string.Compare(a.Text,b.Text,StringComparison.CurrentCultureIgnoreCase);});parent.DropDownItems.Clear();parent.DropDownItems.AddRange(items.ToArray());}
     void BuildMenu()
     {
-        menu.Items.Add(new ToolStripMenuItem("NekoCat By Mauro · 2.0.5 · "+settings.Name) {Enabled=false});
+        menu.Items.Add(new ToolStripMenuItem("NekoCat By Mauro · 2.0.6 · "+settings.Name) {Enabled=false});
         menu.Items.Add("Ponerle nombre…",null,delegate{
             renaming=true;string name;try{name=NamePrompt.Ask(settings.Name);}finally{renaming=false;}
-            if(name!=null){settings.Name=name;menu.Items[0].Text="NekoCat By Mauro · 2.0.5 · "+name;UpdateTrayText();Save();DrawBadge();}
+            if(name!=null){settings.Name=name;menu.Items[0].Text="NekoCat By Mauro · 2.0.6 · "+name;UpdateTrayText();Save();DrawBadge();}
         });
         showName.Checked=settings.ShowName;showName.CheckOnClick=true;
         showName.CheckedChanged+=delegate{settings.ShowName=showName.Checked;Save();DrawBadge();};menu.Items.Add(showName);
@@ -410,7 +410,7 @@ internal sealed class WelcomeToast : Form
     public WelcomeToast(Icon catIcon)
     {
         icon = (Icon)catIcon.Clone();
-        Text = "NekoCat By Mauro 2.0.5";
+        Text = "NekoCat By Mauro 2.0.6";
         AutoScaleMode = AutoScaleMode.None;
         FormBorderStyle = FormBorderStyle.None;
         ShowInTaskbar = false;
@@ -419,73 +419,41 @@ internal sealed class WelcomeToast : Form
         BackColor = Color.FromArgb(252,247,240);
         ClientSize = new Size(360,82);
         DoubleBuffered = true;
-…3856 tokens truncated…VX)*0.8;}
-            if(Y<r.Top+14){Y=r.Top+14;VY=Math.Abs(VY)*0.8;}
-            if(Y>r.Bottom-14){Y=r.Bottom-14;VY=-Math.Abs(VY)*0.8;}
+        Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+        Location = new Point(area.Right - Width - 20,area.Bottom - Height - 20);
+        closeTimer.Interval = 3000;
+        closeTimer.Tick += delegate { Close(); };
+        Shown += delegate { closeTimer.Start(); };
+        MouseClick += delegate { Close(); };
+    }
+    protected override bool ShowWithoutActivation { get { return true; } }
+    protected override CreateParams CreateParams
+    {
+        get { CreateParams p = base.CreateParams; p.ExStyle |= 0x80 | 0x08000000; return p; }
+    }
+    protected override void WndProc(ref Message m)
+    {
+        if (m.Msg == 0x21) { m.Result = new IntPtr(3); return; }
+        base.WndProc(ref m);
+    }
+    protected override void OnPaint(PaintEventArgs e)
+    {
+        base.OnPaint(e);
+        e.Graphics.DrawIcon(icon,new Rectangle(17,25,32,32));
+        using (var title = new Font("Segoe UI",13,FontStyle.Bold))
+        using (var caption = new Font("Segoe UI",9))
+        using (var ink = new SolidBrush(Color.FromArgb(51,43,43)))
+        using (var muted = new SolidBrush(Color.FromArgb(116,104,104)))
+        using (var border = new Pen(Color.FromArgb(228,212,198)))
+        {
+            e.Graphics.DrawString("NekoCat By Mauro 2.0.6",title,ink,64,18);
+            e.Graphics.DrawString("Tu mascota ya está aquí.",caption,muted,66,46);
+            e.Graphics.DrawRectangle(border,0,0,Width-1,Height-1);
         }
-        DrawToy();
     }
-    void DrawToy()
+    protected override void Dispose(bool disposing)
     {
-        using(var b=new Bitmap(28,28,PixelFormat.Format32bppPArgb))using(Graphics g=Graphics.FromImage(b)){
-            g.SmoothingMode=SmoothingMode.AntiAlias;
-            using(var fill=new SolidBrush(kind==1?Color.FromArgb(173,127,219):kind==2?Color.FromArgb(195,220,146):kind==3?Color.FromArgb(236,113,161):kind==4?Color.Red:Color.FromArgb(243,162,63)))
-            using(var outline=new Pen(kind==1?Color.FromArgb(91,58,130):Color.FromArgb(123,68,28),2)){
-                g.FillEllipse(fill,3,3,21,21);g.DrawEllipse(outline,3,3,21,21);
-                if(kind==1){g.DrawArc(outline,6,4,10,19,70,240);g.DrawArc(outline,11,4,10,19,100,230);g.DrawArc(outline,3,8,21,10,0,180);}
-                else if(kind==2){g.FillEllipse(Brushes.Pink,17,8,7,5);g.DrawArc(outline,1,10,13,11,45,220);}
-                else if(kind==3){g.DrawLine(outline,4,24,15,14);g.DrawLine(outline,15,14,22,5);}
-                else if(kind==4){g.FillEllipse(Brushes.Red,9,9,10,10);}
-                else {g.DrawLine(outline,7,7,21,21);g.DrawArc(outline,4,5,17,15,10,165);}
-                g.FillEllipse(Brushes.White,7,6,4,3);
-            }
-            Present(b,(int)X-14,(int)Y-14);
-        }
-    }
-}
-
-internal static class WindowPerch
-{
-    public static bool Bounds(IntPtr hwnd,out Rectangle bounds)
-    {
-        bounds=Rectangle.Empty;
-        if(hwnd==IntPtr.Zero || !Native.IsWindow(hwnd) || !Native.IsWindowVisible(hwnd) || Native.IsIconic(hwnd))return false;
-        int cloaked;
-        if(Native.DwmGetWindowAttribute(hwnd,14,out cloaked,4)==0 && cloaked!=0)return false;
-        Native.RECT r;
-        if(Native.DwmGetWindowAttributeRect(hwnd,9,out r,16)!=0 && !Native.GetWindowRect(hwnd,out r))return false;
-        bounds=Rectangle.FromLTRB(r.Left,r.Top,r.Right,r.Bottom);return bounds.Width>150 && bounds.Height>90;
-    }
-    public static IntPtr Find(Point near,int catSize)
-    {
-        IntPtr chosen=IntPtr.Zero;Rectangle area=Screen.FromPoint(near).WorkingArea;
-        Native.EnumWindows(delegate(IntPtr hwnd,IntPtr unused){
-            uint pid;Native.GetWindowThreadProcessId(hwnd,out pid);
-            if(pid==Native.GetCurrentProcessId() || (Native.GetWindowLong(hwnd,-20)&0x80)!=0)return true;
-            var name=new StringBuilder(128);Native.GetClassName(hwnd,name,128);
-            if(name.ToString()=="Progman" || name.ToString()=="WorkerW" || name.ToString()=="Shell_TrayWnd")return true;
-            Rectangle r;
-            if(!Bounds(hwnd,out r) || r.Top<area.Top+catSize+12 || r.Top>area.Bottom-40 || r.Right<area.Left+catSize || r.Left>area.Right-catSize)return true;
-            chosen=hwnd;return false;
-        },IntPtr.Zero);
-        return chosen;
-    }
-}
-
-internal static class NamePrompt
-{
-    public static string Ask(string current)
-    {
-        using(var dialog=new Form())using(var input=new TextBox())using(var ok=new Button())using(var cancel=new Button())using(var label=new Label()){
-            dialog.Text="Nombre de tu gato";dialog.ClientSize=new Size(330,140);dialog.FormBorderStyle=FormBorderStyle.FixedDialog;
-            dialog.MaximizeBox=false;dialog.MinimizeBox=false;dialog.StartPosition=FormStartPosition.CenterScreen;dialog.TopMost=true;
-            label.Text="¿Cómo se llama? (máximo 20 caracteres)";label.SetBounds(16,16,300,24);
-            input.Text=current;input.MaxLength=20;input.SetBounds(16,47,296,26);
-            ok.Text="Guardar";ok.DialogResult=DialogResult.OK;ok.SetBounds(128,92,88,30);
-            cancel.Text="Cancelar";cancel.DialogResult=DialogResult.Cancel;cancel.SetBounds(224,92,88,30);
-            dialog.Controls.AddRange(new Control[]{label,input,ok,cancel});dialog.AcceptButton=ok;dialog.CancelButton=cancel;
-            dialog.Shown+=delegate{input.Focus();input.SelectAll();};
-            return dialog.ShowDialog()==DialogResult.OK ? PetSettings.CleanName(input.Text):null;
-        }
+        if (disposing) { closeTimer.Dispose(); icon.Dispose(); }
+        base.Dispose(disposing);
     }
 }

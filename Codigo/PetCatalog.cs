@@ -180,15 +180,31 @@ internal static class PetCatalog {
    int bx=0,by=1,b2x=1,b2y=1,sx=1,sy=0,s2x=3,s2y=0,fx=1,fy=2,f2x=3,f2y=3;
    if(design==16){bx=0;by=1;b2x=1;b2y=2;sx=0;sy=3;s2x=2;s2y=3;}
    if(design==17){bx=1;by=1;b2x=1;b2y=3;sx=2;sy=2;s2x=2;s2y=3;fx=0;fy=0;f2x=6;f2y=0;}
+   // The Among Us sheet's default side pair faces opposite directions and
+   // includes a falling pose. Use its two matching left-facing walk frames;
+   // back and front pairs likewise stay on their intended views.
+   if(design==25){bx=0;by=1;b2x=1;b2y=3;sx=5;sy=0;s2x=6;s2y=0;fx=0;fy=0;f2x=3;f2y=2;}
    CopyPair(result,source,bx,by,b2x,b2y,1,2,1,3,false); // N
    CopyPair(result,source,bx,by,b2x,b2y,0,2,0,3,false); // NE
    CopyPair(result,source,bx,by,b2x,b2y,1,0,1,1,true);  // NW
-   CopyPair(result,source,sx,sy,s2x,s2y,3,0,3,1,false); // E
+   CopySidePair(result,source,sx,sy,s2x,s2y,3,0,3,1); // E
    CopyPair(result,source,sx,sy,s2x,s2y,4,2,4,3,true);  // W
    CopyPair(result,source,fx,fy,f2x,f2y,6,3,7,2,false); // S
    CopyPair(result,source,fx,fy,f2x,f2y,5,1,5,2,false); // SE
    CopyPair(result,source,fx,fy,f2x,f2y,5,3,6,1,true);  // SW
   return result;
+ }
+ static void CopySidePair(Bitmap result,Bitmap source,int ax,int ay,int bx,int by,int dx1,int dy1,int dx2,int dy2){
+  // Imported pose sheets sometimes put opposite-facing poses in adjacent
+  // cells. Keep both frames facing the same way, then mirror the pair for W.
+  bool flipSecond=MirroredDifference(source,ax,ay,bx,by)+0.01<DirectDifference(source,ax,ay,bx,by);
+  CopyPose(result,source,ax,ay,dx1,dy1,false);CopyPose(result,source,bx,by,dx2,dy2,flipSecond);
+ }
+ static long DirectDifference(Bitmap source,int ax,int ay,int bx,int by){
+  long total=0;for(int y=0;y<128;y++)for(int x=0;x<128;x++){Color a=source.GetPixel(ax*128+x,ay*128+y),b=source.GetPixel(bx*128+x,by*128+y);total+=Math.Abs(a.A-b.A)+Math.Abs(a.R-b.R)+Math.Abs(a.G-b.G)+Math.Abs(a.B-b.B);}return total;
+ }
+ static long MirroredDifference(Bitmap source,int ax,int ay,int bx,int by){
+  long total=0;for(int y=0;y<128;y++)for(int x=0;x<128;x++){Color a=source.GetPixel(ax*128+x,ay*128+y),b=source.GetPixel(bx*128+127-x,by*128+y);total+=Math.Abs(a.A-b.A)+Math.Abs(a.R-b.R)+Math.Abs(a.G-b.G)+Math.Abs(a.B-b.B);}return total;
  }
  static void CopyPair(Bitmap result,Bitmap source,int ax,int ay,int bx,int by,int dx1,int dy1,int dx2,int dy2,bool flip){
   CopyPose(result,source,ax,ay,dx1,dy1,flip);CopyPose(result,source,bx,by,dx2,dy2,flip);

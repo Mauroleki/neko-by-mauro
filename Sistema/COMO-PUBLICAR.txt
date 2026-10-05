@@ -1,15 +1,15 @@
-PUBLICAR NEKOCAT BY MAURO 2.0.5
+PUBLICAR NEKOCAT BY MAURO 2.0.6
 Repositorio: https://github.com/Mauroleki/neko-by-mauro
 
 1. Ejecuta Codigo/COMPILAR.cmd. Compila NekoCat.exe y una copia Oneko.exe.
-2. Crea una Release estable v2.0.5 con titulo NekoCat By Mauro 2.0.5.
+2. Crea una Release estable v2.0.6 con titulo NekoCat By Mauro 2.0.6.
 3. Adjunta solo NekoCat.exe. No adjuntes Oneko.exe, ZIP ni README.
 4. NekoCat.exe debe ocupar menos de 30 MiB; es el archivo que usa el actualizador.
 5. Publica como Latest, no borrador ni prerelease.
 
 Para futuras versiones aumenta AssemblyVersion, AssemblyFileVersion y
 el numero del mensaje de apertura. El actualizador nuevo descarga NekoCat.exe. Instalaciones previas a la
-version 2.0.5 pueden requerir que el usuario descargue esta version manualmente,
+versiones anteriores a 2.0.4 pueden requerir que el usuario descargue la 2.0.4 manualmente,
 porque sus actualizadores anteriores buscaban Oneko.exe.
 
 El ZIP de nuevas instalaciones solo necesita NekoCat.exe en la raiz.
@@ -17,3 +17,5 @@ Los ajustes y la clave de inicio automatico conservan sus identificadores
 internos antiguos para mantener preferencias al cambiar de nombre.
 
 La version 2.0.5 elimina accesorios, objetos de escritorio y sorpresas aleatorias.
+
+La version 2.0.6 ajusta el movimiento lateral del Among Us Rojo y normaliza la orientacion de las mascotas importadas.
