@@ -15,7 +15,7 @@ internal static class Updater
             if(args.Length!=4)throw new ArgumentException("Faltan datos de la actualización.");
             target=Path.GetFullPath(args[0]);string staged=Path.GetFullPath(args[1]);
             int parent=int.Parse(args[2]);string expected=args[3].ToLowerInvariant();
-            if(Path.GetFileName(target)!="Oneko.exe" || !File.Exists(target) || !File.Exists(staged) || expected.Length!=64)
+            if((Path.GetFileName(target)!="Oneko.exe" && Path.GetFileName(target)!="NekoCat.exe") || !File.Exists(target) || !File.Exists(staged) || expected.Length!=64)
                 throw new InvalidDataException("La actualización no tiene los archivos esperados.");
             using(var stream=File.OpenRead(staged))using(var sha=SHA256.Create()){
                 string actual=BitConverter.ToString(sha.ComputeHash(stream)).Replace("-","").ToLowerInvariant();
@@ -39,7 +39,7 @@ internal static class Updater
             Process.Start(new ProcessStartInfo(target){WorkingDirectory=Path.GetDirectoryName(target),UseShellExecute=true});
         }catch(Exception ex){
             MessageBox.Show("No se pudo instalar la actualización. La versión anterior se conserva.\n\n"+ex.Message,
-                "Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                "NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Error);
             if(target!=null && File.Exists(target))try { Process.Start(new ProcessStartInfo(target){WorkingDirectory=Path.GetDirectoryName(target),UseShellExecute=true}); }catch(Exception){}
         }
     }

@@ -1,38 +1,18 @@
-ACTUALIZACIONES DE ONEKO BY MAU
+PUBLICAR NEKOCAT BY MAURO 2.0
+Repositorio: https://github.com/Mauroleki/neko-by-mauro
 
-Repositorio configurado: https://github.com/Mauroleki/neko-by-mauro
-Debe ser PUBLICO para que la app consulte versiones sin iniciar sesion.
+1. Ejecuta Codigo/COMPILAR.cmd. Compila NekoCat.exe y una copia Oneko.exe.
+2. Crea una Release estable v2.0.0 con titulo NekoCat By Mauro 2.0.
+3. Adjunta NekoCat.exe, Oneko.exe (mismos bytes) y NekoCat By Mauro.zip.
+4. Oneko.exe es obligatorio para las instalaciones existentes de 1.8.
+   No lo renombres ni lo omitas. Debe ocupar menos de 30 MiB.
+5. Publica como Latest, no borrador ni prerelease.
 
-VERSION ACTUAL (1.8)
-1. En el repositorio de GitHub, abre Releases y luego Draft a new release.
-2. Crea la etiqueta v1.8.0 y escribe el titulo "Oneko By Mau 1.8".
-3. Adjunta el Oneko.exe y Neko By Mauro.zip de esta misma version.
-   El archivo Oneko.exe debe conservar EXACTAMENTE ese nombre, ya que
-   el programa lo busca asi entre los archivos adjuntos.
-4. Publica una version estable (sin marcarla como prerelease).
-5. Reparte el ZIP una sola vez a quienes usan versiones anteriores.
+Para futuras versiones aumenta AssemblyVersion, AssemblyFileVersion y
+el numero del mensaje de apertura. Conserva el asset Oneko.exe mientras
+haya versiones compatibles que lo busquen. El actualizador admite como
+launcher local tanto Oneko.exe como NekoCat.exe.
 
-SIGUIENTES PUBLICACIONES
-1. Para cada version nueva, aumenta el numero del mensaje de apertura y
-   AssemblyVersion de Oneko.cs. Recompila Oneko.exe.
-2. Publica una Release estable de GitHub con etiqueta v1.9.0 (segun la
-   version correspondiente) y adjunta el archivo Oneko.exe COMO ASSET.
-   Puedes adjuntar tambien el ZIP completo para nuevas instalaciones.
-3. Al abrirse, el programa consulta la ultima Release. Si encuentra una
-   version superior, pregunta si se descarga e instala. Tambien hay una
-   opcion manual en el menu.
-
-El programa comprueba HTTPS, nombre y ubicacion del asset, tamano y la
-huella SHA-256 que publica GitHub antes de reemplazar el ejecutable.
-Updater.exe espera a que se cierre el programa anterior, guarda una copia
-en Sistema/Oneko.previous.exe y abre la version nueva.
-
-Los usuarios de versiones 1.5 o anteriores deben descargar UNA VEZ una
-version que incluya este mecanismo. Si la 1.6 muestra "Todavia no se ha
-configurado el repositorio", debe instalar manualmente la 1.8 una vez.
-Las versiones futuras ya podran llegar desde GitHub Releases. Para actualizar,
-el usuario debe poder escribir en
-la carpeta donde extrajo el programa; evita carpetas protegidas del sistema.
-
-Nunca incluyas tokens de GitHub en canal.txt. El repositorio debe ser
-publico y la Release no puede ser un borrador ni una version preliminar.
+El ZIP de nuevas instalaciones solo necesita NekoCat.exe en la raiz.
+Los ajustes y la clave de inicio automatico conservan sus identificadores
+internos antiguos para mantener preferencias al cambiar de nombre.

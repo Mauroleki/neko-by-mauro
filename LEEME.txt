@@ -1,4 +1,38 @@
-ONEKO BY MAU - 1.8 - WINDOWS 10 / 11
+NEKOCAT BY MAURO 2.0
+
+INICIO RAPIDO
+1. Cierra la version anterior desde su icono junto al reloj > Salir.
+2. Extrae TODO este ZIP en una carpeta permanente.
+3. Abre NekoCat.exe. Tus ajustes anteriores se conservan.
+4. Clic derecho en el icono junto al reloj > Mascotas.
+
+MASCOTAS
+54 opciones en total, ordenadas alfabeticamente dentro de su categoria.
+Videojuegos: personajes del ZIP VideoJuegos, mas Hornet y El Caballero.
+Anime: personajes del ZIP Anime.
+Otros: personajes del ZIP Otros y subcarpeta Gatos con los 13 diseños.
+Valorant: Karnalito, que ya estaba en esta categoria.
+Se respetan las categorias de las carpetas recibidas, incluso si un
+personaje aparece tambien en otras franquicias o medios.
+Charmander y Kirby usan las hojas nuevas completas; no aparecen duplicados.
+
+ACTUALIZAR
+La app consulta GitHub al abrir y cada 15 minutos. Si hay una Release
+estable superior, pregunta si quieres actualizar y conserva tus ajustes.
+Para compatibilidad con 1.8, GitHub incluye tambien Oneko.exe con los
+mismos bytes que NekoCat.exe. Los usuarios que actualicen desde 1.8
+conservaran ese nombre de archivo, pero veran NekoCat By Mauro 2.0.
+No hace falta mover los ajustes ni volver a configurar tus mascotas.
+
+CARPETAS
+Codigo: fuentes y COMPILAR.cmd.
+Recursos: sprites y catalogo de mascotas.
+Sistema: actualizador y canal de GitHub.
+Vistas previas: muestras de los personajes.
+Licencias: creditos del motor original.
+
+INSTRUCCIONES DE FUNCIONES Y VERSIONES ANTERIORES
+NEKOCAT BY MAURO - 2.0 - WINDOWS 10 / 11
 
 QUE ABRIR
 - Oneko.exe: abre el gato. Esta en esta misma carpeta.
@@ -16,7 +50,7 @@ ABRIR O ACTUALIZAR
    al reloj de Windows > Salir. Si no lo ves, abre la flecha ^.
 2. Extrae este ZIP: clic derecho > Extraer todo.
 3. Abre Oneko.exe en la carpeta extraida.
-4. Aparece "Oneko By Mau 1.8" durante 3 segundos y empieza el seguimiento.
+4. Aparece "NekoCat By Mauro 2.0" durante 3 segundos y empieza el seguimiento.
    No necesitas compilar, instalar Python ni usar Vencord.
 
 TODOS LOS CONTROLES: CLIC DERECHO EN EL ICONO JUNTO AL RELOJ
@@ -245,3 +279,12 @@ ONEKO BY MAU 1.8 - AVISO AUTOMATICO CORREGIDO
   no puede enterarse sola de esta correccion. Cierra esa copia, descarga el
   ZIP completo de la version 1.8, extraelo y abre el nuevo Oneko.exe una vez.
   Las preferencias se guardan fuera de la carpeta y se conservan.
+
+ONEKO BY MAU 1.9 - NUEVAS MASCOTAS
+- Hornet y Kirby: Mascotas > Videojuegos.
+- Charmander: Mascotas > Anime > Pokémon.
+- Karnalito: Mascotas > Valorant. Gatos: Mascotas > Otros > Gatos.
+- Las selecciones anteriores se conservan.
+- Hornet y Kirby usan las poses de las hojas proporcionadas.
+- Charmander usa las dos poses proporcionadas y movimiento al caminar;
+  todavia no cuenta con poses dibujadas adicionales para dormir o acariciar.

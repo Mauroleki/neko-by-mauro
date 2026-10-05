@@ -73,16 +73,18 @@ internal sealed class PetSettings
 
 internal static class SkinFactory
 {
-    public static readonly string[] Names = { "Blanco clásico", "Naranjita", "Gris humo", "Negrito", "Crema", "Rosa pastel", "Lavanda", "Azul cielo", "Siamés", "Atigrado naranja", "Atigrado gris", "Calicó", "Esmoquin", "Karnalito (VALORANT)", "El Caballero (Hollow Knight)" };
-    public static int FrameSize(int design) { return design==13 ? KarnalitoSprites.CellSize : design==14 ? KnightSprites.CellSize : 32; }
+    public static readonly string[] Names = PetCatalog.Names;
+    public static int FrameSize(int design) { return PetCatalog.HasAtlas(design) ? 128 : design>=15 ? PetSprites.CellSize : design==13 ? KarnalitoSprites.CellSize : design==14 ? KnightSprites.CellSize : 32; }
     static readonly Color[] Fur = { Color.White, C(247,173,87), C(163,174,192), C(70,77,91), C(247,225,176), C(246,174,199), C(193,175,239), C(158,211,241) };
     static readonly Color[] Ink = { Color.Black, C(89,46,26), C(42,48,61), C(16,19,27), C(94,67,37), C(102,43,68), C(60,44,94), C(34,66,91) };
     static Color C(int r,int g,int b) { return Color.FromArgb(r,g,b); }
     // Recolour only original opaque pixels. Silhouettes and every animation are preserved.
     public static Bitmap Make(Bitmap original,int design)
     {
+        if(PetCatalog.HasAtlas(design))return PetCatalog.Load(design);
         if(design==13)return KarnalitoSprites.Load();
         if(design==14)return KnightSprites.Load();
+        if(design>=15)return PetSprites.Load(design);
         var result = new Bitmap(original.Width,original.Height,PixelFormat.Format32bppArgb);
         for (int cy=0;cy<4;cy++) for (int cx=0;cx<8;cx++) {
             int minX=32,minY=32,maxX=0,maxY=0;

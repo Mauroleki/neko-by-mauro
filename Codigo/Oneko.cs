@@ -1,4 +1,4 @@
-// Oneko By Mau. Desktop adaptation of oneko.js (adryd, MIT).
+// NekoCat By Mauro. Desktop adaptation of oneko.js (adryd, MIT).
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,8 +10,11 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-[assembly: AssemblyVersion("1.8.0.0")]
-[assembly: AssemblyFileVersion("1.8.0.0")]
+[assembly: AssemblyTitle("NekoCat By Mauro")]
+[assembly: AssemblyProduct("NekoCat By Mauro")]
+[assembly: AssemblyDescription("Mascotas animadas para el escritorio")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7.2", FrameworkDisplayName=".NET Framework 4.7.2")]
 
 internal static class Program
@@ -25,7 +28,7 @@ internal static class Program
                 try{Native.SetProcessDpiAwarenessContext(new IntPtr(-4));}catch(EntryPointNotFoundException){Native.SetProcessDPIAware();}
                 Application.EnableVisualStyles();Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new CatForm());
-            }catch(Exception ex){MessageBox.Show("No se pudo abrir Oneko.\n\n"+ex.Message,"Oneko",MessageBoxButtons.OK,MessageBoxIcon.Error);}
+            }catch(Exception ex){MessageBox.Show("No se pudo abrir NekoCat.\n\n"+ex.Message,"NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Error);}
             finally{mutex.ReleaseMutex();}
         }
     }
@@ -73,7 +76,7 @@ internal sealed class CatForm : SpriteOverlay
     CatForm(int catSlot,CatForm parent)
     {
         slot=catSlot;leader=parent??this;settings=PetSettings.Load(slot);
-        Text="Oneko By Mau";
+        Text="NekoCat By Mauro";
         using(Stream stream=Assembly.GetExecutingAssembly().GetManifestResourceStream("oneko.gif"))
         using(var image=new Bitmap(stream))original=new Bitmap(image);
         try { sheet=SkinFactory.Make(original,settings.Design); }
@@ -115,13 +118,14 @@ internal sealed class CatForm : SpriteOverlay
     Point CatPoint {get{return new Point((int)neko.X,(int)neko.Y);}}
     void Add(string name,params int[] cells){var points=new Point[cells.Length/2];for(int i=0;i<points.Length;i++)points[i]=new Point(cells[2*i],cells[2*i+1]);sprites[name]=points;}
     void Save(){if(!settings.Save() && !settingsWarning){settingsWarning=true;Notice("No pude guardar los ajustes. Se mantendrán durante esta sesión.");}}
-    void Notice(string text){tray.ShowBalloonTip(4000,"Oneko By Mau",text,ToolTipIcon.Info);}
+    void Notice(string text){tray.ShowBalloonTip(4000,"NekoCat By Mauro",text,ToolTipIcon.Info);}
+    static void SortPetMenu(ToolStripMenuItem parent){var items=new List<ToolStripItem>();foreach(ToolStripItem item in parent.DropDownItems)items.Add(item);items.Sort(delegate(ToolStripItem a,ToolStripItem b){return string.Compare(a.Text,b.Text,StringComparison.CurrentCultureIgnoreCase);});parent.DropDownItems.Clear();parent.DropDownItems.AddRange(items.ToArray());}
     void BuildMenu()
     {
-        menu.Items.Add(new ToolStripMenuItem("Oneko By Mau · 1.8 · "+settings.Name) {Enabled=false});
+        menu.Items.Add(new ToolStripMenuItem("NekoCat By Mauro · 2.0 · "+settings.Name) {Enabled=false});
         menu.Items.Add("Ponerle nombre…",null,delegate{
             renaming=true;string name;try{name=NamePrompt.Ask(settings.Name);}finally{renaming=false;}
-            if(name!=null){settings.Name=name;menu.Items[0].Text="Oneko By Mau · 1.8 · "+name;UpdateTrayText();Save();DrawBadge();}
+            if(name!=null){settings.Name=name;menu.Items[0].Text="NekoCat By Mauro · 2.0 · "+name;UpdateTrayText();Save();DrawBadge();}
         });
         showName.Checked=settings.ShowName;showName.CheckOnClick=true;
         showName.CheckedChanged+=delegate{settings.ShowName=showName.Checked;Save();DrawBadge();};menu.Items.Add(showName);
@@ -161,10 +165,10 @@ internal sealed class CatForm : SpriteOverlay
         AddOption(behavior,"Sorpresas aleatorias",settings.Surprises,delegate(bool v){settings.Surprises=v;});
         menu.Items.Add(behavior);
         if(slot==0){
-            var cats=new ToolStripMenuItem("Varios gatos (máximo 4)");
-            cats.DropDownItems.Add("Agregar gato",null,delegate{AddCat(settings.CatCount,true);});
-            cats.DropDownItems.Add("Quitar último gato",null,delegate{RemoveLastCat();});
-            cats.DropDownItems.Add("Cada gato tiene su propio icono, nombre, diseño y tamaño") .Enabled=false;
+            var cats=new ToolStripMenuItem("Varias mascotas (máximo 4)");
+            cats.DropDownItems.Add("Agregar mascota",null,delegate{AddCat(settings.CatCount,true);});
+            cats.DropDownItems.Add("Quitar última mascota",null,delegate{RemoveLastCat();});
+            cats.DropDownItems.Add("Cada mascota tiene su propio icono, nombre, diseño y tamaño") .Enabled=false;
             menu.Items.Add(cats);
             var objects=new ToolStripMenuItem("Objetos del escritorio");
             for(int i=0;i<PetPlace.Names.Length;i++){
@@ -173,11 +177,21 @@ internal sealed class CatForm : SpriteOverlay
             objects.DropDownItems.Add("Guardar todos los objetos",null,delegate{ClearPlaces();});
             menu.Items.Add(objects);
         }
-        var skins=new ToolStripMenuItem("Tipo de gato");
+        var skins=new ToolStripMenuItem("Mascotas");
+        var games=new ToolStripMenuItem("Videojuegos");
+        var anime=new ToolStripMenuItem("Anime");
+        var others=new ToolStripMenuItem("Otros");
+        var valorant=new ToolStripMenuItem("Valorant");
+        var catsFolder=new ToolStripMenuItem("Gatos");
+        others.DropDownItems.Add(catsFolder);
+        skins.DropDownItems.AddRange(new ToolStripItem[]{games,anime,others,valorant});
         for(int i=0;i<SkinFactory.Names.Length;i++){
             int chosen=i;var item=new ToolStripMenuItem(SkinFactory.Names[i]){Checked=i==settings.Design};
-            item.Click+=delegate{ChangeDesign(chosen);};designs.Add(item);skins.DropDownItems.Add(item);
-        }menu.Items.Add(skins);
+            item.Click+=delegate{ChangeDesign(chosen);};designs.Add(item);
+            (i<13?catsFolder:PetCatalog.Categories[i]=="Valorant"?valorant:PetCatalog.Categories[i]=="Anime"?anime:PetCatalog.Categories[i]=="Otros"?others:games).DropDownItems.Add(item);
+        }
+        foreach(ToolStripMenuItem category in new[]{games,anime,others,valorant,catsFolder})SortPetMenu(category);
+        menu.Items.Add(skins);
         var sizeMenu=new ToolStripMenuItem("Tamaño");
         for(int i=1;i<=3;i++){
             int chosen=i;var item=new ToolStripMenuItem((32*i)+" px"){Checked=i==settings.Scale};
@@ -194,9 +208,9 @@ internal sealed class CatForm : SpriteOverlay
                 bool enable=!StartupManager.IsEnabled();
                 StartupManager.SetEnabled(enable);
                 startWithWindows.Checked=StartupManager.IsEnabled();
-                Notice(enable ? "Inicio automático activado. Oneko se abrirá cuando inicies sesión en Windows. Conserva el programa en esta carpeta." : "Inicio automático desactivado. Oneko solo se abrirá cuando lo ejecutes.");
+                Notice(enable ? "Inicio automático activado. NekoCat se abrirá cuando inicies sesión en Windows. Conserva el programa en esta carpeta." : "Inicio automático desactivado. NekoCat solo se abrirá cuando lo ejecutes.");
             } catch(Exception ex) {
-                MessageBox.Show("No se pudo cambiar el inicio automático.\n\n"+ex.Message,"Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show("No se pudo cambiar el inicio automático.\n\n"+ex.Message,"NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Information);
             }
         };
         menu.Opening+=delegate {
@@ -205,7 +219,7 @@ internal sealed class CatForm : SpriteOverlay
         };
         menu.Items.Add(startWithWindows);
         if(slot==0)menu.Items.Add("Buscar actualizaciones",null,async delegate { await UpdateManager.CheckAsync(this,false); });
-        menu.Items.Add(slot==0?"Salir":"Quitar último gato",null,delegate{if(slot==0)Close();else leader.RemoveLastCat();});
+        menu.Items.Add(slot==0?"Salir":"Quitar última mascota",null,delegate{if(slot==0)Close();else leader.RemoveLastCat();});
     }
     void AddOption(ToolStripMenuItem menuItem,string label,bool value,Action<bool> change)
     {
@@ -214,7 +228,7 @@ internal sealed class CatForm : SpriteOverlay
     }
     void ConfigureSize(){neko.Speed=10*settings.Scale;neko.StopDistance=48*settings.Scale;neko.Margin=Side/2;}
     void ClampTo(Rectangle r){neko.Clamp(r.Left,r.Top,r.Right,r.Bottom);}
-    void UpdateTrayText(){tray.Text="Oneko By Mau · "+settings.Name+(paused?" (en pausa)":"");}
+    void UpdateTrayText(){tray.Text="NekoCat By Mauro · "+settings.Name+(paused?" (en pausa)":"");}
     void TogglePause(){paused=!paused;pause.Text=paused?"Reanudar":"Pausar";UpdateTrayText();}
     void ClearFrames(){foreach(Bitmap b in frames.Values)b.Dispose();frames.Clear();}
     void ChangeDesign(int value)
@@ -222,7 +236,7 @@ internal sealed class CatForm : SpriteOverlay
         Bitmap replacement;
         try { replacement=SkinFactory.Make(original,value); }
         catch(Exception ex) {
-            MessageBox.Show("No se pudo cargar este personaje. Se conserva el anterior.\n\n"+ex.Message,"Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("No se pudo cargar este personaje. Se conserva el anterior.\n\n"+ex.Message,"NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Information);
             return;
         }
         Bitmap previous=sheet;int previousDesign=settings.Design;
@@ -230,7 +244,7 @@ internal sealed class CatForm : SpriteOverlay
         try { DrawCat(); }
         catch(Exception ex) {
             ClearFrames();sheet=previous;settings.Design=previousDesign;replacement.Dispose();
-            MessageBox.Show("No se pudo mostrar este personaje. Se conserva el anterior.\n\n"+ex.Message,"Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("No se pudo mostrar este personaje. Se conserva el anterior.\n\n"+ex.Message,"NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Information);
             return;
         }
         previous.Dispose();
@@ -255,7 +269,7 @@ internal sealed class CatForm : SpriteOverlay
         try {
             cat=new CatForm(index,this);cat.Show(this);companions.Add(cat);
             if(userAction){settings.CatCount=companions.Count+1;Save();Notice("Abre el icono del nuevo gato para cambiar su nombre, diseño y accesorios.");}
-        }catch(Exception ex){if(cat!=null)cat.Dispose();settings.CatCount=companions.Count+1;Save();MessageBox.Show("No pude agregar el gato.\n\n"+ex.Message,"Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);}
+        }catch(Exception ex){if(cat!=null)cat.Dispose();settings.CatCount=companions.Count+1;Save();MessageBox.Show("No pude agregar el gato.\n\n"+ex.Message,"NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Information);}
     }
     void RemoveLastCat()
     {
@@ -415,7 +429,7 @@ internal sealed class CatForm : SpriteOverlay
         using(Graphics g=Graphics.FromImage(b)){
             int cellSize=SkinFactory.FrameSize(settings.Design);
             g.CompositingMode=CompositingMode.SourceCopy;
-            g.InterpolationMode=settings.Design>=13 ? InterpolationMode.HighQualityBicubic : InterpolationMode.NearestNeighbor;
+            g.InterpolationMode=settings.Design>=13 && settings.Design<=15 ? InterpolationMode.HighQualityBicubic : InterpolationMode.NearestNeighbor;
             g.PixelOffsetMode=PixelOffsetMode.Half;
             using(Bitmap tile=sheet.Clone(new Rectangle(cell.X*cellSize,cell.Y*cellSize,cellSize,cellSize),PixelFormat.Format32bppArgb))
                 g.DrawImage(tile,new Rectangle(0,0,Side,Side),0,0,cellSize,cellSize,GraphicsUnit.Pixel);
@@ -474,14 +488,14 @@ internal sealed class WelcomeToast : Form
     public WelcomeToast(Icon catIcon)
     {
         icon = (Icon)catIcon.Clone();
-        Text = "Oneko By Mau 1.8";
+        Text = "NekoCat By Mauro 2.0";
         AutoScaleMode = AutoScaleMode.None;
         FormBorderStyle = FormBorderStyle.None;
         ShowInTaskbar = false;
         TopMost = true;
         StartPosition = FormStartPosition.Manual;
         BackColor = Color.FromArgb(252,247,240);
-        ClientSize = new Size(280,82);
+        ClientSize = new Size(360,82);
         DoubleBuffered = true;
         Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
         Location = new Point(area.Right - Width - 20,area.Bottom - Height - 20);
@@ -510,8 +524,8 @@ internal sealed class WelcomeToast : Form
         using (var muted = new SolidBrush(Color.FromArgb(116,104,104)))
         using (var border = new Pen(Color.FromArgb(228,212,198)))
         {
-            e.Graphics.DrawString("Oneko By Mau 1.8",title,ink,64,18);
-            e.Graphics.DrawString("Tu gatito ya esta aqui.",caption,muted,66,46);
+            e.Graphics.DrawString("NekoCat By Mauro 2.0",title,ink,64,18);
+            e.Graphics.DrawString("Tu mascota ya está aquí.",caption,muted,66,46);
             e.Graphics.DrawRectangle(border,0,0,Width-1,Height-1);
         }
     }

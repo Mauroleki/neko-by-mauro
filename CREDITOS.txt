@@ -1,3 +1,6 @@
+NEKOCAT BY MAURO 2.0
+Nombre anterior: Oneko By Mau.
+
 ONEKO ESCRITORIO
 
 Adaptacion a Windows de oneko.js, de adryd.
@@ -61,3 +64,14 @@ La licencia MIT de oneko.js no cubre este personaje ni su hoja de poses.
 
 Version 1.8: canal oficial y actualizador integrados en el ejecutable;
 aviso automatico al abrir y cada 15 minutos, incluso sin archivos de Sistema.
+
+Version 1.9: Hornet, Charmander y Kirby, con imagenes aportadas por el usuario.
+Hornet / Hollow Knight: Team Cherry. Pokémon / Charmander: Nintendo,
+Game Freak y Creatures. Kirby: Nintendo / HAL Laboratory.
+Personajes y sprites pertenecen a sus respectivos titulares; proyecto de fans
+sin afiliacion oficial. No se atribuye autoria de los sprites aportados.
+
+Version 2.0: 38 hojas de sprites aportadas por el usuario, adaptadas a las
+32 casillas del motor de animacion. Se mantienen los autores y derechos
+de los personajes y hojas originales. No se atribuye su autoria a este
+proyecto. Proyecto de fans sin afiliacion oficial a sus titulares.

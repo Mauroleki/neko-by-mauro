@@ -16,11 +16,12 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-"%NEKO_CSC%" /nologo /target:winexe /platform:anycpu /optimize+ /out:"..\Oneko.exe" /win32manifest:app.manifest /resource:..\Recursos\oneko.gif,oneko.gif /resource:..\Recursos\karnalito.png,karnalito.png /resource:..\Recursos\knight.png,knight.png /resource:..\Sistema\Updater.exe,Updater.exe /reference:System.dll /reference:System.Xml.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll Oneko.cs NekoEngine.cs Extras.cs Native.cs KarnalitoSprites.cs KnightSprites.cs StartupManager.cs World.cs UpdateManager.cs JsonLite.cs
+"%NEKO_CSC%" /nologo /target:winexe /platform:anycpu /optimize+ /out:"..\NekoCat.exe" /win32manifest:app.manifest /resource:..\Recursos\oneko.gif,oneko.gif /resource:..\Recursos\karnalito.png,karnalito.png /resource:..\Recursos\knight.png,knight.png /resource:..\Recursos\hornet.png,hornet.png /resource:..\Recursos\charmander.png,charmander.png /resource:..\Recursos\charmander-back.png,charmander-back.png /resource:..\Recursos\kirby.png,kirby.png /resource:..\Sistema\Updater.exe,Updater.exe @mascotas.rsp /reference:System.dll /reference:System.Xml.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll Oneko.cs NekoEngine.cs Extras.cs Native.cs KarnalitoSprites.cs KnightSprites.cs PetSprites.cs PetCatalog.cs StartupManager.cs World.cs UpdateManager.cs JsonLite.cs
 if errorlevel 1 (
   echo No se pudo compilar. Copia el mensaje de arriba para revisar el problema.
   pause
   exit /b 1
 )
-echo Listo. Abre Oneko.exe en la carpeta principal.
+copy /y "..\NekoCat.exe" "..\Oneko.exe" >nul
+echo Listo. Abre NekoCat.exe en la carpeta principal.
 pause

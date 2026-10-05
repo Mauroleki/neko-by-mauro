@@ -104,7 +104,7 @@ internal static class UpdateManager
         if(busy || window.IsDisposed || window.Disposing)return;
         string owner,repo;
         if(!ReadChannel(out owner,out repo)){
-            if(!automatic)MessageBox.Show("Todavía no se ha configurado el repositorio de actualizaciones. Consulta LEEME.txt.","Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            if(!automatic)MessageBox.Show("Todavía no se ha configurado el repositorio de actualizaciones. Consulta LEEME.txt.","NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Information);
             return;
         }
         busy=true;
@@ -121,13 +121,13 @@ internal static class UpdateManager
             if(window.IsDisposed || window.Disposing)return;
             var installed=Assembly.GetExecutingAssembly().GetName().Version;
             if(release.Version<=installed){
-                if(!automatic)MessageBox.Show("Ya tienes la última versión ("+installed.Major+"."+installed.Minor+").","Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                if(!automatic)MessageBox.Show("Ya tienes la última versión ("+installed.Major+"."+installed.Minor+").","NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 return;
             }
             if(automatic && release.Version==lastPromptedVersion)return;
             lastPromptedVersion=release.Version;
             if(MessageBox.Show(window,"Hay una nueva versión disponible.\n\n¿Quieres actualizar?\n\nVersión "+release.Version,
-                "Oneko By Mau",MessageBoxButtons.YesNo,MessageBoxIcon.Question)!=DialogResult.Yes)return;
+                "NekoCat By Mauro",MessageBoxButtons.YesNo,MessageBoxIcon.Question)!=DialogResult.Yes)return;
             Directory.CreateDirectory(UpdateDirectory);
             string staged=Path.Combine(UpdateDirectory,"Oneko-"+Guid.NewGuid().ToString("N")+".exe");
             try {
@@ -141,7 +141,7 @@ internal static class UpdateManager
                 window.Close();
             }catch { try { if(File.Exists(staged))File.Delete(staged); }catch(IOException){} throw; }
         }catch(Exception ex){
-            if(!automatic || !(ex is WebException))MessageBox.Show("No se pudo actualizar. Oneko seguirá funcionando.\n\n"+ex.Message,"Oneko By Mau",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            if(!automatic || !(ex is WebException))MessageBox.Show("No se pudo actualizar. NekoCat seguirá funcionando.\n\n"+ex.Message,"NekoCat By Mauro",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }finally{busy=false;}
     }
 }
