@@ -1,10 +1,10 @@
-# NekoCat By Mauro 2.0
+# NekoCat By Mauro 2.0.1
 
-[Descargar la versión 2.0](https://github.com/Mauroleki/neko-by-mauro/releases/tag/v2.0.0): elige **NekoCat.By.Mauro.zip**, extrae todo y abre **NekoCat.exe**. Incluye 54 mascotas, con las categorías Videojuegos, Anime, Otros y Valorant.
+[Descargar la versión 2.0.1](https://github.com/Mauroleki/neko-by-mauro/releases/tag/v2.0.1): elige **NekoCat-By-Mauro-2.0.1.zip**, extrae todo y abre **NekoCat.exe**. Incluye 54 mascotas, con las categorías Videojuegos, Anime, Otros y Valorant.
 
-Para nuevas instalaciones usa los archivos de **Releases**. El `Oneko.exe` que aparece en el código del repositorio es la versión antigua 1.8; el archivo `Oneko.exe` adjunto a la Release 2.0 es la copia compatible para su actualizador.
+Para nuevas instalaciones usa los archivos de **Releases**. El `Oneko.exe` que aparece en el código del repositorio es la versión antigua 1.8; el archivo `Oneko.exe` adjunto a la Release 2.0.1 es la copia compatible para su actualizador.
 
-Las instrucciones y los créditos están en la raíz del ZIP. El código fuente está en `Codigo`, los sprites en `Recursos` y el actualizador en `Sistema`.
+La 2.0.1 corrige el parpadeo de orientación en las primeras 19 mascotas importadas. Las instrucciones y los créditos están en la raíz del ZIP. El código fuente está en `Codigo`, los sprites en `Recursos` y el actualizador en `Sistema`.
 
 ---
 
