@@ -1,4 +1,4 @@
-NEKOCAT BY MAURO 2.0
+NEKOCAT BY MAURO 2.0.1
 Nombre anterior: Oneko By Mau.
 
 ONEKO ESCRITORIO
@@ -75,3 +75,6 @@ Version 2.0: 38 hojas de sprites aportadas por el usuario, adaptadas a las
 32 casillas del motor de animacion. Se mantienen los autores y derechos
 de los personajes y hojas originales. No se atribuye su autoria a este
 proyecto. Proyecto de fans sin afiliacion oficial a sus titulares.
+
+Version 2.0.1: las primeras 19 mascotas importadas usan cuadros elegidos
+para mantener una orientacion estable al caminar.
